@@ -39,6 +39,10 @@ Usage
     }
 
 
+
+	/**
+	 * @param \Nette\Http\FileUpload $file
+	 */
 	public function handleUploadFile(\Nette\Http\FileUpload $file)
 	{
 		...
