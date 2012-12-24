@@ -12,10 +12,13 @@ There is no need for including any extra JS or Css in head. Everything is done a
 Usage
 -----
 
-    public function createComponentPlupload()
+	/**
+	 * @param string $name
+	 * @return \Echo511\Plupload\Widget\JQueryUIWidget
+	 */
+    public function createComponentPlupload($name)
     {
-        // Main object
-        $uploader = new Echo511\Plupload\Rooftop();
+        $uploader = new Echo511\Plupload\Plupload();
 
         // Use magic for loading Js and Css?
         // $uploader->disableMagic();
@@ -23,7 +26,7 @@ Usage
         // Configuring paths
         $uploader->setWwwDir(WWW_DIR) // Full path to your frontend directory
                  ->setBasePath($this->template->basePath) // BasePath provided by Nette
-                 ->setTempLibsDir(WWW_DIR . '/plupload511/test'); // Full path to the location of plupload libs (js, css)
+                 ->setResourcesDir(WWW_DIR . '/mfu'); // Full path to the location of plupload libs (js, css)
 
         // Configuring plupload
         $uploader->createSettings()
@@ -33,11 +36,8 @@ Usage
 
         // Configuring uploader
         $uploader->createUploader()
-                 ->setTempUploadsDir(WWW_DIR . '/plupload511/tempDir') // Where should be placed temporaly files
-                 ->setToken("ahoj") // Resolves file names collisions in temp directory
+                 ->setTempDir(WWW_DIR . '/../temp') // Where should be placed temporaly files
                  ->setOnSuccess(array($this, 'tests')); // Callback when upload is successful: returns Nette\Http\FileUpload
 
         return $uploader->getComponent();
     }
-
-See the code for more intel...
