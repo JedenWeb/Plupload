@@ -6,7 +6,10 @@
     "authors":[
         {
             "name":"Nikolas Tsiongas"
-        }
+        },
+		{
+			"name":"Pavel Jurasek"
+		}
     ],
     "require":{
         "php":">=5.3.2",
