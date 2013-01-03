@@ -24,8 +24,8 @@
     },
 	"autoload": {
 		"psr-0": {
-			"Echo511\\Plupload": ""
+			"PavelJurasek\\Plupload": ""
 		}
 	},
-	"target-dir":"Echo511/Plupload"
+	"target-dir": "PavelJurasek/Plupload"
 }
