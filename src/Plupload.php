@@ -1,6 +1,6 @@
 <?php
 
-namespace Echo511\Plupload;
+namespace PavelJurasek\Plupload;
 
 use Nette;
 
@@ -49,9 +49,9 @@ class Plupload extends \Nette\Object
 
 	/**
 	 * @param string $class
-	 * @return \Echo511\Plupload\class
+	 * @return \PavelJurasek\Plupload\class
 	 */
-    public function getComponent($class = 'Echo511\Plupload\Widget\JQueryUIWidget')
+    public function getComponent($class = '\PavelJurasek\Plupload\Widget\JQueryUIWidget')
     {
         return new $class($this);
     }
@@ -73,7 +73,7 @@ class Plupload extends \Nette\Object
 
 
 	/**
-	 * @return \Echo511\Plupload\Plupload
+	 * @return \PavelJurasek\Plupload\Plupload
 	 */
     public function disableMagic()
     {
@@ -89,7 +89,7 @@ class Plupload extends \Nette\Object
 
 	/**
 	 * @param string $dir
-	 * @return \Echo511\Plupload\Plupload
+	 * @return \PavelJurasek\Plupload\Plupload
 	 */
     public function setWwwDir($dir)
     {
@@ -101,7 +101,7 @@ class Plupload extends \Nette\Object
 
 	/**
 	 * @param string $basePath
-	 * @return \Echo511\Plupload\Plupload
+	 * @return \PavelJurasek\Plupload\Plupload
 	 */
     public function setBasePath($basePath)
     {
@@ -113,7 +113,7 @@ class Plupload extends \Nette\Object
 
 	/**
 	 * @param string $dir
-	 * @return \Echo511\Plupload\Plupload
+	 * @return \PavelJurasek\Plupload\Plupload
 	 */
     public function setResourcesDir($dir)
     {
@@ -124,8 +124,8 @@ class Plupload extends \Nette\Object
 
 
 	/**
-	 * @param \Echo511\Plupload\PluploadSettings $settings
-	 * @return \Echo511\Plupload\Plupload
+	 * @param \PavelJurasek\Plupload\PluploadSettings $settings
+	 * @return \PavelJurasek\Plupload\Plupload
 	 */
     public function setPluploadSettings(PluploadSettings $settings)
     {
@@ -136,8 +136,8 @@ class Plupload extends \Nette\Object
 
 
 	/**
-	 * @param \Echo511\Plupload\Uploaders\IUploader $uploader
-	 * @return \Echo511\Plupload\Plupload
+	 * @param \PavelJurasek\Plupload\Uploaders\IUploader $uploader
+	 * @return \PavelJurasek\Plupload\Plupload
 	 */
     public function setUploader(Uploaders\IUploader $uploader)
     {
@@ -182,9 +182,9 @@ class Plupload extends \Nette\Object
 
 	/**
 	 * @param string $class
-	 * @return \Echo511\Plupload\class
+	 * @return \PavelJurasek\Plupload\class
 	 */
-    public function createSettings($class = 'Echo511\Plupload\PluploadSettings')
+    public function createSettings($class = '\PavelJurasek\Plupload\PluploadSettings')
     {
         $settings = new $class;
         $this->setPluploadSettings($settings);
@@ -195,9 +195,9 @@ class Plupload extends \Nette\Object
 
 	/**
 	 * @param string $class
-	 * @return \Echo511\Plupload\class
+	 * @return \PavelJurasek\Plupload\class
 	 */
-    public function createUploader($class = 'Echo511\Plupload\Uploaders\DefaultUploader')
+    public function createUploader($class = '\PavelJurasek\Plupload\Uploaders\DefaultUploader')
     {
         $uploader = new $class;
         $this->setUploader($uploader);

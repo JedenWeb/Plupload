@@ -1,6 +1,6 @@
 <?php
 
-namespace Echo511\Plupload;
+namespace PavelJurasek\Plupload;
 
 use Nette;
 
@@ -38,7 +38,7 @@ class PluploadSettings extends \Nette\Object
 
 	/**
 	 * @param array $runtimes
-	 * @return \Echo511\Plupload\PluploadSettings
+	 * @return \PavelJurasek\Plupload\PluploadSettings
 	 * @throws Nette\InvalidArgumentException
 	 */
     public function setRuntimes(array $runtimes)
@@ -57,7 +57,7 @@ class PluploadSettings extends \Nette\Object
 
 	/**
 	 * @param string $expr
-	 * @return \Echo511\Plupload\PluploadSettings
+	 * @return \PavelJurasek\Plupload\PluploadSettings
 	 */
     public function setMaxFileSize($expr)
     {
@@ -69,7 +69,7 @@ class PluploadSettings extends \Nette\Object
 
 	/**
 	 * @param string $expr
-	 * @return \Echo511\Plupload\PluploadSettings
+	 * @return \PavelJurasek\Plupload\PluploadSettings
 	 */
     public function setMaxChunkSize($expr)
     {

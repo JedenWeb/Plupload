@@ -1,6 +1,6 @@
 <?php
 
-namespace Echo511\Plupload\Uploaders;
+namespace PavelJurasek\Plupload\Uploaders;
 
 use Nette;
 
@@ -52,7 +52,7 @@ class DefaultUploader extends \Nette\Object implements IUploader
 
 	/**
 	 * @param string $dir
-	 * @return \Echo511\Plupload\Uploaders\DefaultUploader
+	 * @return \PavelJurasek\Plupload\Uploaders\DefaultUploader
 	 */
     public function setTempDir($dir)
     {
@@ -64,7 +64,7 @@ class DefaultUploader extends \Nette\Object implements IUploader
 
 	/**
 	 * @param string $token
-	 * @return \Echo511\Plupload\Uploaders\DefaultUploader
+	 * @return \PavelJurasek\Plupload\Uploaders\DefaultUploader
 	 */
     public function setToken($token = null)
     {

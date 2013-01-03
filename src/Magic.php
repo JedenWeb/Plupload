@@ -1,6 +1,6 @@
 <?php
 
-namespace Echo511\Plupload;
+namespace PavelJurasek\Plupload;
 
 use Nette;
 
@@ -39,7 +39,7 @@ class Magic extends \Nette\Object
 
 	/**
 	 * @param string $resourcesDir
-	 * @return \Echo511\Plupload\Magic
+	 * @return \PavelJurasek\Plupload\Magic
 	 */
     public function setResourcesDir($resourcesDir)
     {

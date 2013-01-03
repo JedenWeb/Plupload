@@ -1,6 +1,6 @@
 <?php
 
-namespace Echo511\Plupload\Widget;
+namespace PavelJurasek\Plupload\Widget;
 
 use Nette;
 
@@ -16,16 +16,16 @@ class JQueryUIWidget extends \Nette\Application\UI\Control
 {
 
     /**
-	 * @var \Echo511\Plupload\Plupload
+	 * @var \PavelJurasek\Plupload\Plupload
 	 */
     private $plupload;
 
 
 
 	/**
-	 * @param \Echo511\Plupload\Plupload $plupload
+	 * @param \PavelJurasek\Plupload\Plupload $plupload
 	 */
-    public function __construct(\Echo511\Plupload\Plupload $plupload)
+    public function __construct(\PavelJurasek\Plupload\Plupload $plupload)
     {
         $this->plupload = $plupload;
     }
@@ -51,7 +51,7 @@ class JQueryUIWidget extends \Nette\Application\UI\Control
 
 
 		if ($this->plupload->isMagical()) {
-			$magic = new \Echo511\Plupload\Magic;
+			$magic = new \PavelJurasek\Plupload\Magic;
             $magic->setResourcesDir($this->plupload->resourcesDir);
 			$this->template->magic = $magic;
 		}
