@@ -26,6 +26,5 @@
 		"psr-0": {
 			"PavelJurasek\\Plupload": ""
 		}
-	},
-	"target-dir": "PavelJurasek/Plupload"
+	}
 }
