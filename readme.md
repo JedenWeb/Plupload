@@ -4,7 +4,13 @@ Plupload component for Nette
 Implementation:
 ---------------
 
-Don't forget to load jQuery and jQuery UI manually.
+	{
+		"require" {
+			"paveljurasek/facebook-php-sdk": "dev-master"
+		}
+	}
+
+Requires jQuery and jQueryUI.
 
 There is no need for including any extra JS or Css in head. Everything is done automatically. If you prefer doing it yourself then disable magic.
 
