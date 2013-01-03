@@ -6,7 +6,7 @@ Implementation:
 
 	{
 		"require" {
-			"paveljurasek/facebook-php-sdk": "dev-master"
+			"paveljurasek/plupload": "dev-master"
 		}
 	}
 
