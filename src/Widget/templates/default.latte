@@ -1,33 +1,60 @@
 {if $isMagical}
-    {!$magic->registerJs('/js/plupload.full.js')}
-    {!$magic->registerJs('/js/jquery.ui.plupload.js')}
+	{!$magic->registerJs('/js/plupload.full.js')}
+	{!$magic->registerJs('/js/jquery.ui.plupload.js')}
 
-    {!$magic->registerCss('/css/jquery.ui.plupload.css')}
+	{!$magic->registerCss('/css/jquery.ui.plupload.css')}
 {/if}
 
 <script type="text/javascript">
-    $(document).ready(function() {
-        // Setup gears version
-        $("#uploader-{!$token}").plupload({
-            // General settings
-            runtimes : {implode(',', $pluploadSettings->getRuntimes())},
-            url : {link Upload!},
-            max_file_size : {$pluploadSettings->getMaxFilesize()},
-            headers: {'X-Requested-With': 'XMLHttpRequest'},
-            init : {
-                // Called when a file has finished uploading
-                FileUploaded: function(up, file, info) {
-                    var json = jQuery.parseJSON(info.response);
-                    $.nette.success(json);
-                }
-            },
-            chunk_size : {$pluploadSettings->getMaxChunkSize()},
-            flash_swf_url : "{!$resourcesDir}/swf/plupload.flash.swf",
-            silverlight_xap_url : "{!$resourcesDir}/xap/plupload.silverlight.xap"
-        });
-    });
+	$(document).ready(function() {
+		// Setup gears version
+		$("#uploader-{!$token}").plupload({
+			// General settings
+			runtimes : {implode(',', $pluploadSettings->getRuntimes())},
+			url : {link Upload!},
+			max_file_size : {$pluploadSettings->getMaxFilesize()},
+			headers: {'X-Requested-With': 'XMLHttpRequest'},
+			init : {
+				// Called when a file has finished uploading
+				FileUploaded: function(up, file, info) {
+					var payload = jQuery.parseJSON(info.response);
+					/*
+					 * Code for updating snippets is copied from https://github.com/vojtech-dobes/nette.ajax.js
+					 * @author Vojtěch Dobeš
+					 * @license MIT
+					 */
+					if (payload.snippets) {
+						for (var i in payload.snippets) {
+							var $el = $('#' + i.replace(/[\!"#\$%&'\(\)\*\+,\.\/:;<=>\?@\[\\\]\^`\{ \|\}~]/g, '\\$&'));
+							(function ($el, html, back) {
+								if (typeof $el == 'string') {
+									$el = this.getElement($el);
+								}
+								// Fix for setting document title in IE
+								if ($el.is('title')) {
+									document.title = html;
+								} else {
+//									this.applySnippet($el, html, back);
+									(function ($el, html, back) {
+										if (!back && $el.is('[data-ajax-append]')) {
+											$el.append(html);
+										} else {
+											$el.html(html);
+										}
+									})($el, html, back);
+								}
+							})($el, payload.snippets[i]);
+						}
+					}
+				}
+			},
+			chunk_size : {$pluploadSettings->getMaxChunkSize()},
+			flash_swf_url : "{!$resourcesDir}/swf/plupload.flash.swf",
+			silverlight_xap_url : "{!$resourcesDir}/xap/plupload.silverlight.xap"
+		});
+	});
 </script>
 
 <div class="plupload" id="uploader-{!$token}" style="width: 750px; height: 330px;">
-    There is no support for any of these: {implode(',', $pluploadSettings->getRuntimes())}
+	There is no support for any of these: {implode(',', $pluploadSettings->getRuntimes())}
 </div>
