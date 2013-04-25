@@ -15,35 +15,35 @@ use Nette;
 class Plupload extends \Nette\Object
 {
 
-    /**
+	/**
 	 * @var string
 	 */
-    private $wwwDir;
+	private $wwwDir;
 
-    /**
+	/**
 	 * @var string
 	 */
-    private $basePath;
+	private $basePath;
 
-    /**
+	/**
 	 * @var string
 	 */
-    private $resourcesDir;
+	private $resourcesDir;
 
-    /**
+	/**
 	 * @var PluploadSettings
 	 */
-    private $pluploadSettings;
+	private $pluploadSettings;
 
-    /**
+	/**
 	 * @var Uploaders\IUploader
 	 */
-    private $uploader;
+	private $uploader;
 
-    /**
+	/**
 	 * @var bool
 	 */
-    private $useMagic = true;
+	private $useMagic = true;
 
 
 
@@ -51,35 +51,35 @@ class Plupload extends \Nette\Object
 	 * @param string $class
 	 * @return \PavelJurasek\Plupload\class
 	 */
-    public function getComponent($class = '\PavelJurasek\Plupload\Widget\JQueryUIWidget')
-    {
-        return new $class($this);
-    }
+	public function getComponent($class = '\PavelJurasek\Plupload\Widget\JQueryUIWidget')
+	{
+		return new $class($this);
+	}
 
 
 
-    /*********************** magic ***********************/
+	/*********************** magic ***********************/
 
 
 
 	/**
 	 * @return bool
 	 */
-    public function isMagical()
-    {
-        return (bool) $this->useMagic;
-    }
+	public function isMagical()
+	{
+		return (bool) $this->useMagic;
+	}
 
 
 
 	/**
 	 * @return \PavelJurasek\Plupload\Plupload
 	 */
-    public function disableMagic()
-    {
-        $this->useMagic = false;
-        return $this;
-    }
+	public function disableMagic()
+	{
+		$this->useMagic = false;
+		return $this;
+	}
 
 
 
@@ -91,11 +91,11 @@ class Plupload extends \Nette\Object
 	 * @param string $dir
 	 * @return \PavelJurasek\Plupload\Plupload
 	 */
-    public function setWwwDir($dir)
-    {
-        $this->wwwDir = $dir;
-        return $this;
-    }
+	public function setWwwDir($dir)
+	{
+		$this->wwwDir = $dir;
+		return $this;
+	}
 
 
 
@@ -103,11 +103,11 @@ class Plupload extends \Nette\Object
 	 * @param string $basePath
 	 * @return \PavelJurasek\Plupload\Plupload
 	 */
-    public function setBasePath($basePath)
-    {
-        $this->basePath = $basePath;
-        return $this;
-    }
+	public function setBasePath($basePath)
+	{
+		$this->basePath = $basePath;
+		return $this;
+	}
 
 
 
@@ -115,11 +115,11 @@ class Plupload extends \Nette\Object
 	 * @param string $dir
 	 * @return \PavelJurasek\Plupload\Plupload
 	 */
-    public function setResourcesDir($dir)
-    {
-        $this->resourcesDir = $this->returnDir($dir);
-        return $this;
-    }
+	public function setResourcesDir($dir)
+	{
+		$this->resourcesDir = $this->returnDir($dir);
+		return $this;
+	}
 
 
 
@@ -127,11 +127,11 @@ class Plupload extends \Nette\Object
 	 * @param \PavelJurasek\Plupload\PluploadSettings $settings
 	 * @return \PavelJurasek\Plupload\Plupload
 	 */
-    public function setPluploadSettings(PluploadSettings $settings)
-    {
-        $this->pluploadSettings = $settings;
-        return $this;
-    }
+	public function setPluploadSettings(PluploadSettings $settings)
+	{
+		$this->pluploadSettings = $settings;
+		return $this;
+	}
 
 
 
@@ -139,57 +139,44 @@ class Plupload extends \Nette\Object
 	 * @param \PavelJurasek\Plupload\Uploaders\IUploader $uploader
 	 * @return \PavelJurasek\Plupload\Plupload
 	 */
-    public function setUploader(Uploaders\IUploader $uploader)
-    {
-        $this->uploader = $uploader;
-        return $this;
-    }
+	public function setUploader(Uploaders\IUploader $uploader)
+	{
+		$this->uploader = $uploader;
+		return $this;
+	}
 
 
 
-    /*********************** getters ***********************/
+	/*********************** getters ***********************/
 
 
 
 	/**
 	 * @return string
 	 */
-    public function getResourcesDir()
-    {
-        if($this->isMagical()) {
-            if(!file_exists($this->resourcesDir . '/copied'))
-                self::copy(__DIR__ . '/front', $this->resourcesDir);
-        }
+	public function getResourcesDir()
+	{
+		if($this->isMagical()) {
+			if(!file_exists($this->resourcesDir . '/copied'))
+				self::copy(__DIR__ . '/front', $this->resourcesDir);
+		}
 
-        return $this->basePath.str_replace($this->wwwDir, '', $this->resourcesDir);
-    }
+		return $this->basePath.str_replace($this->wwwDir, '', $this->resourcesDir);
+	}
 
 
 
 	/**
 	 * @return PluploadSettings
 	 */
-    public function getPluploadSettings()
-    {
-        return $this->pluploadSettings;
-    }
+	public function getPluploadSettings()
+	{
+		return $this->pluploadSettings;
+	}
 
 
 
-    /*********************** factories ***********************/
-
-
-
-	/**
-	 * @param string $class
-	 * @return \PavelJurasek\Plupload\class
-	 */
-    public function createSettings($class = '\PavelJurasek\Plupload\PluploadSettings')
-    {
-        $settings = new $class;
-        $this->setPluploadSettings($settings);
-        return $settings;
-    }
+	/*********************** factories ***********************/
 
 
 
@@ -197,12 +184,25 @@ class Plupload extends \Nette\Object
 	 * @param string $class
 	 * @return \PavelJurasek\Plupload\class
 	 */
-    public function createUploader($class = '\PavelJurasek\Plupload\Uploaders\DefaultUploader')
-    {
-        $uploader = new $class;
-        $this->setUploader($uploader);
-        return $uploader;
-    }
+	public function createSettings($class = '\PavelJurasek\Plupload\PluploadSettings')
+	{
+		$settings = new $class;
+		$this->setPluploadSettings($settings);
+		return $settings;
+	}
+
+
+
+	/**
+	 * @param string $class
+	 * @return \PavelJurasek\Plupload\class
+	 */
+	public function createUploader($class = '\PavelJurasek\Plupload\Uploaders\DefaultUploader')
+	{
+		$uploader = new $class;
+		$this->setUploader($uploader);
+		return $uploader;
+	}
 
 
 
@@ -210,14 +210,14 @@ class Plupload extends \Nette\Object
 
 
 
-    public function upload()
-    {
-        $this->uploader->upload();
-    }
+	public function upload()
+	{
+		$this->uploader->upload();
+	}
 
 
 
-    /*********************** helpers ***********************/
+	/*********************** helpers ***********************/
 
 
 
@@ -225,16 +225,16 @@ class Plupload extends \Nette\Object
 	 * @param string $dir
 	 * @return string
 	 */
-    private function returnDir($dir)
-    {
-        if( is_dir($dir) ) {
-            return $dir;
-        } else {
-            if($this->isMagical())
-                mkdir($dir, 0, true);
-            return $dir;
-        }
-    }
+	private function returnDir($dir)
+	{
+		if( is_dir($dir) ) {
+			return $dir;
+		} else {
+			if($this->isMagical())
+				mkdir($dir, 0, true);
+			return $dir;
+		}
+	}
 
 
 
@@ -243,23 +243,23 @@ class Plupload extends \Nette\Object
 	 * @param string $dest
 	 * @param bool $overwrite
 	 */
-    public static function copy($source, $dest, $overwrite = true)
+	public static function copy($source, $dest, $overwrite = true)
 	{
-        $dir = opendir($source);
-        @mkdir($dest);
-        while(false !== ($file = readdir($dir))) {
-            if (($file != '.') && ($file != '..')) {
-                if(is_dir($source . '/' . $file)) {
-                    self::copy($source . '/' . $file, $dest . '/' . $file);
+		$dir = opendir($source);
+		@mkdir($dest);
+		while(false !== ($file = readdir($dir))) {
+			if (($file != '.') && ($file != '..')) {
+				if(is_dir($source . '/' . $file)) {
+					self::copy($source . '/' . $file, $dest . '/' . $file);
 
-                } else {
-                    if($overwrite || !file_exists($dest . '/' . $file)) {
-                        copy($source . '/' . $file, $dest . '/' . $file);
-                    }
-                }
-            }
-        }
-        closedir($dir);
-    }
+				} else {
+					if($overwrite || !file_exists($dest . '/' . $file)) {
+						copy($source . '/' . $file, $dest . '/' . $file);
+					}
+				}
+			}
+		}
+		closedir($dir);
+	}
 
 }
