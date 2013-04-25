@@ -13,6 +13,6 @@ namespace PavelJurasek\Plupload\Uploaders;
 interface IUploader
 {
 
-    public function upload();
+	public function upload();
 
 }

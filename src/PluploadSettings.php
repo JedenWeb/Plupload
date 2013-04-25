@@ -18,21 +18,21 @@ class PluploadSettings extends \Nette\Object
 	/**
 	 * @var array
 	 */
-    private $runtimes = array('html5');
+	private $runtimes = array('html5');
 
-    /**
+	/**
 	 * @var string
 	 */
-    private $maxFileSize = '10mb';
+	private $maxFileSize = '10mb';
 
-    /**
+	/**
 	 * @var string
 	 */
-    private $maxChunkSize = '5mb';
+	private $maxChunkSize = '5mb';
 
 
 
-    /*********************** setters ***********************/
+	/*********************** setters ***********************/
 
 
 
@@ -41,17 +41,17 @@ class PluploadSettings extends \Nette\Object
 	 * @return \PavelJurasek\Plupload\PluploadSettings
 	 * @throws Nette\InvalidArgumentException
 	 */
-    public function setRuntimes(array $runtimes)
-    {
-        $possible = array('gears', 'flash', 'silverlight', 'browserplus', 'html5');
-        foreach($runtimes as $runtime) {
-            if(!in_array($runtime, $possible)) {
-                throw new Nette\InvalidArgumentException('There is no runtime called: '.$runtime);
-            }
-        }
-        $this->runtimes = $runtimes;
-        return $this;
-    }
+	public function setRuntimes(array $runtimes)
+	{
+		$possible = array('gears', 'flash', 'silverlight', 'browserplus', 'html5');
+		foreach($runtimes as $runtime) {
+			if(!in_array($runtime, $possible)) {
+				throw new Nette\InvalidArgumentException('There is no runtime called: '.$runtime);
+			}
+		}
+		$this->runtimes = $runtimes;
+		return $this;
+	}
 
 
 
@@ -59,11 +59,11 @@ class PluploadSettings extends \Nette\Object
 	 * @param string $expr
 	 * @return \PavelJurasek\Plupload\PluploadSettings
 	 */
-    public function setMaxFileSize($expr)
-    {
-        $this->maxFileSize = $expr;
-        return $this;
-    }
+	public function setMaxFileSize($expr)
+	{
+		$this->maxFileSize = $expr;
+		return $this;
+	}
 
 
 
@@ -71,44 +71,44 @@ class PluploadSettings extends \Nette\Object
 	 * @param string $expr
 	 * @return \PavelJurasek\Plupload\PluploadSettings
 	 */
-    public function setMaxChunkSize($expr)
-    {
-        $this->maxChunkSize = $expr;
-        return $this;
-    }
+	public function setMaxChunkSize($expr)
+	{
+		$this->maxChunkSize = $expr;
+		return $this;
+	}
 
 
 
-    /*********************** getters ***********************/
+	/*********************** getters ***********************/
 
 
 
 	/**
 	 * @return array
 	 */
-    public function getRuntimes()
-    {
-        return $this->runtimes;
-    }
+	public function getRuntimes()
+	{
+		return $this->runtimes;
+	}
 
 
 
 	/**
 	 * @return string
 	 */
-    public function getMaxFileSize()
-    {
-        return $this->maxFileSize;
-    }
+	public function getMaxFileSize()
+	{
+		return $this->maxFileSize;
+	}
 
 
 
 	/**
 	 * @return string
 	 */
-    public function getMaxChunkSize()
-    {
-        return $this->maxChunkSize;
-    }
+	public function getMaxChunkSize()
+	{
+		return $this->maxChunkSize;
+	}
 
 }

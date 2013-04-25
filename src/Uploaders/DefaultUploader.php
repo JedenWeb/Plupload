@@ -15,38 +15,38 @@ use Nette;
 class DefaultUploader extends \Nette\Object implements IUploader
 {
 
-    /**
+	/**
 	 * @var array
 	 */
-    public $onSuccess;
+	public $onSuccess;
 
-    /**
+	/**
 	 * @var string
 	 */
-    public $tempDir;
+	public $tempDir;
 
-    /**
+	/**
 	 * @var string
 	 */
-    public $token = 'eufwd';
+	public $token = 'eufwd';
 
 
 
 	/**
 	 * @return bool
 	 */
-    public function isReady()
-    {
+	public function isReady()
+	{
 		if (!$this->token) {
 			$this->setToken();
 		}
 
-        return !(!$this->onSuccess || !$this->tempDir);
-    }
+		return !(!$this->onSuccess || !$this->tempDir);
+	}
 
 
 
-    /*********************** setters ***********************/
+	/*********************** setters ***********************/
 
 
 
@@ -54,11 +54,11 @@ class DefaultUploader extends \Nette\Object implements IUploader
 	 * @param string $dir
 	 * @return \PavelJurasek\Plupload\Uploaders\DefaultUploader
 	 */
-    public function setTempDir($dir)
-    {
-        $this->tempDir = $this->returnDir($dir);
-        return $this;
-    }
+	public function setTempDir($dir)
+	{
+		$this->tempDir = $this->returnDir($dir);
+		return $this;
+	}
 
 
 
@@ -66,52 +66,52 @@ class DefaultUploader extends \Nette\Object implements IUploader
 	 * @param string $token
 	 * @return \PavelJurasek\Plupload\Uploaders\DefaultUploader
 	 */
-    public function setToken($token = null)
-    {
+	public function setToken($token = null)
+	{
 		if (!$token) {
 			$token = \Nette\Utils\Strings::random();
 		}
 
-        $this->token = md5($token);
-        return $this;
-    }
+		$this->token = md5($token);
+		return $this;
+	}
 
 
 
-    /*********************** IUploader ***********************/
+	/*********************** IUploader ***********************/
 
 
 
-    public function upload()
-    {
-        if (!$this->isReady()) {
+	public function upload()
+	{
+		if (!$this->isReady()) {
 			throw new Nette\InvalidStateException("Uploader is not set up correctly.");
 		}
 
-        header("Expires: Mon, 26 Jul 1997 05:00:00 GMT");
-        header("Last-Modified: " . gmdate("D, d M Y H:i:s") . " GMT");
-        header("Cache-Control: no-store, no-cache, must-revalidate");
-        header("Cache-Control: post-check=0, pre-check=0", false);
-        header("Pragma: no-cache");
+		header("Expires: Mon, 26 Jul 1997 05:00:00 GMT");
+		header("Last-Modified: " . gmdate("D, d M Y H:i:s") . " GMT");
+		header("Cache-Control: no-store, no-cache, must-revalidate");
+		header("Cache-Control: post-check=0, pre-check=0", false);
+		header("Pragma: no-cache");
 
-        $targetDir = realpath($this->tempDir);
+		$targetDir = realpath($this->tempDir);
 
-        # 5 minutes execution time
-        @set_time_limit(5 * 60);
+		# 5 minutes execution time
+		@set_time_limit(5 * 60);
 
 
-        $chunk = isset($_REQUEST["chunk"]) ? $_REQUEST["chunk"] : 0;
-        $chunks = isset($_REQUEST["chunks"]) ? $_REQUEST["chunks"] : 0;
-        $fileName = isset($_REQUEST["name"])
+		$chunk = isset($_REQUEST["chunk"]) ? $_REQUEST["chunk"] : 0;
+		$chunks = isset($_REQUEST["chunks"]) ? $_REQUEST["chunks"] : 0;
+		$fileName = isset($_REQUEST["name"])
 			? \Nette\Utils\Strings::webalize($_REQUEST["name"], '.')
 			: \Nette\Utils\Strings::random();
-        $fileNameOriginal = $fileName;
-        $fileName = sha1($this->token.$chunks.$fileNameOriginal);
-        $filePath = $targetDir . DIRECTORY_SEPARATOR . $fileName;
+		$fileNameOriginal = $fileName;
+		$fileName = sha1($this->token.$chunks.$fileNameOriginal);
+		$filePath = $targetDir . DIRECTORY_SEPARATOR . $fileName;
 
 
-        # Make sure the fileName is unique but only if chunking is disabled
-        if ($chunks < 2 && file_exists($filePath)) {
+		# Make sure the fileName is unique but only if chunking is disabled
+		if ($chunks < 2 && file_exists($filePath)) {
 			$ext = strrpos($fileNameOriginal, '.');
 			$fileName_a = substr($fileNameOriginal, 0, $ext);
 			$fileName_b = substr($fileNameOriginal, $ext);
@@ -122,19 +122,19 @@ class DefaultUploader extends \Nette\Object implements IUploader
 			}
 
 			$fileNameOriginal = $fileName_a . '_' . $count . $fileName_b;
-        }
+		}
 
 
-        if (isset($_SERVER["HTTP_CONTENT_TYPE"])) {
+		if (isset($_SERVER["HTTP_CONTENT_TYPE"])) {
 			$contentType = $_SERVER["HTTP_CONTENT_TYPE"];
 		}
 
-        if (isset($_SERVER["CONTENT_TYPE"])) {
+		if (isset($_SERVER["CONTENT_TYPE"])) {
 			$contentType = $_SERVER["CONTENT_TYPE"];
 		}
 
-        # Handle non multipart uploads, older WebKit versions didn't support multipart in HTML5
-        if (strpos($contentType, "multipart") !== false) {
+		# Handle non multipart uploads, older WebKit versions didn't support multipart in HTML5
+		if (strpos($contentType, "multipart") !== false) {
 			if (isset($_FILES['file']['tmp_name']) && is_uploaded_file($_FILES['file']['tmp_name'])) {
 				$out = fopen($targetDir . DIRECTORY_SEPARATOR . $fileName, $chunk === 0 ? "wb" : "ab");
 				if ($out) {
@@ -157,7 +157,7 @@ class DefaultUploader extends \Nette\Object implements IUploader
 			} else {
 				die('{"jsonrpc" : "2.0", "error" : {"code": 103, "message": "Failed to move uploaded file."}, "id" : "id"}');
 			}
-        } else {
+		} else {
 			$out = fopen($targetDir . DIRECTORY_SEPARATOR . $fileName, $chunk == 0 ? "wb" : "ab");
 			if ($out) {
 				$in = fopen("php://input", "rb");
@@ -175,12 +175,12 @@ class DefaultUploader extends \Nette\Object implements IUploader
 			} else {
 				die('{"jsonrpc" : "2.0", "error" : {"code": 102, "message": "Failed to open output stream."}, "id" : "id"}');
 			}
-        }
+		}
 
 
-        $nonChunkedTransfer = ($chunk === 0 && $chunks === 0);
-        $lastChunk = $chunk + 1 === $chunks;
-        if($lastChunk || $nonChunkedTransfer) {
+		$nonChunkedTransfer = ($chunk === 0 && $chunks === 0);
+		$lastChunk = $chunk + 1 === $chunks;
+		if($lastChunk || $nonChunkedTransfer) {
 			$upload = new \Nette\Http\FileUpload(array(
 				'name' => $fileNameOriginal,
 				'type' => $contentType,
@@ -192,12 +192,12 @@ class DefaultUploader extends \Nette\Object implements IUploader
 			$this->onSuccess($upload);
 
 			@unlink($filePath);
-        }
-    }
+		}
+	}
 
 
 
-    /*********************** helpers ***********************/
+	/*********************** helpers ***********************/
 
 
 
@@ -205,14 +205,14 @@ class DefaultUploader extends \Nette\Object implements IUploader
 	 * @param string $dir
 	 * @return string
 	 */
-    private function returnDir($dir)
-    {
-        if( is_dir($dir) ) {
-            return $dir;
-        } else {
-            mkdir($dir, 0, true);
-            return $dir;
-        }
-    }
+	private function returnDir($dir)
+	{
+		if( is_dir($dir) ) {
+			return $dir;
+		} else {
+			mkdir($dir, 0, true);
+			return $dir;
+		}
+	}
 
 }
