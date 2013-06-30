@@ -18,17 +18,17 @@ class PluploadSettings extends Nette\Object
 	/**
 	 * @var array
 	 */
-	private $runtimes = array('html5');
+	private $runtimes;
 
 	/**
 	 * @var string
 	 */
-	private $maxFileSize = '10mb';
+	private $maxFileSize;
 
 	/**
 	 * @var string
 	 */
-	private $maxChunkSize = '5mb';
+	private $maxChunkSize;
 
 
 
@@ -37,18 +37,22 @@ class PluploadSettings extends Nette\Object
 
 
 	/**
-	 * @param array $runtimes
-	 * @return \PavelJurasek\Plupload\PluploadSettings
+	 * @param string|array $runtimes
+	 * @return PluploadSettings  provides fluent interface
 	 * @throws Nette\InvalidArgumentException
 	 */
-	public function setRuntimes(array $runtimes)
+	public function setRuntimes($runtimes)
 	{
-		$possible = array('gears', 'flash', 'silverlight', 'browserplus', 'html5');
-		foreach($runtimes as $runtime) {
-			if(!in_array($runtime, $possible)) {
-				throw new Nette\InvalidArgumentException('There is no runtime called: '.$runtime);
-			}
+		if (is_string($runtimes)) {
+			$runtimes = array($runtimes);
 		}
+		
+		$possible = array('gears', 'flash', 'silverlight', 'browserplus', 'html5');
+		
+		if (!empty(array_intersect($runtimes, $possible))) {
+			throw new Nette\InvalidArgumentException('There is no runtime called: '.$runtime);
+		}
+		
 		$this->runtimes = $runtimes;
 		return $this;
 	}
