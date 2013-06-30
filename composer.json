@@ -1,5 +1,5 @@
 {
-	"name": "paveljurasek/plupload",
+	"name": "jedenweb/plupload",
 	"description": "Plupload based MultipleFiles upload for Nette Framework",
 	"keywords": ["nette", "plupload", "multiple-upload"],
 	"type": "library",
@@ -7,8 +7,7 @@
 	"license": "BSD-3",
 	"authors": [
 		{
-			"name":"Pavel Jurasek",
-			"homepage": "http://www.paveljurasek.cz"
+			"name":"Pavel Jurasek"
 		},
 		{
 			"name":"Nikolas Tsiongas"
@@ -16,10 +15,10 @@
 	],
 	"require":{
 		"php":">=5.3.0",
-		"nette/nette":"2.*"
+		"nette/nette":"*",
+		"kdyby/filesystem": "dev-master"
 	},
 	"support": {
-        "email":"jurasekpavel@ctyrimedia.cz",
         "issues":"https://github.com/paveljurasek/plupload/issues"
     },
 	"autoload": {
