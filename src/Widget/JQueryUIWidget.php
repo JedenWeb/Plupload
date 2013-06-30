@@ -1,6 +1,6 @@
 <?php
 
-namespace PavelJurasek\Plupload\Widget;
+namespace JedenWeb\Plupload\Widget;
 
 use Nette;
 

@@ -1,6 +1,6 @@
 <?php
 
-namespace PavelJurasek\Plupload\Uploaders;
+namespace JedenWeb\Plupload\Uploaders;
 
 /**
  * This file is a part of Plupload component for Nette Framework.

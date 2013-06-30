@@ -1,6 +1,6 @@
 <?php
 
-namespace PavelJurasek\Plupload\Uploaders;
+namespace JedenWeb\Plupload\Uploaders;
 
 use Nette;
 
