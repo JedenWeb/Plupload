@@ -12,206 +12,78 @@ use Nette;
  * @package Plupload component
  * @license New BSD License
  */
-class Plupload extends Nette\Object
+class Plupload extends Nette\Application\UI\Control
 {
 
 	/**
-	 * @var string
+	 * @var Magic
 	 */
-	private $wwwDir;
+	private $magic;
 
-	/**
-	 * @var string
-	 */
-	private $basePath;
-
-	/**
-	 * @var string
-	 */
-	private $resourcesDir;
-
-	/**
-	 * @var PluploadSettings
-	 */
-	private $pluploadSettings;
-
-	/**
-	 * @var Uploaders\IUploader
+	/** 
+	 * @var Uploaders\IUploader 
 	 */
 	private $uploader;
 
-	/**
-	 * @var bool
+	/** 
+	 * @var Settings 
 	 */
-	private $useMagic = true;
-	
-	/**
-	 * @var \Symfony\Component\Filesystem\Filesystem
-	 */
-	private $io;
-	
-	
-	
-	/**
-	 */
-	public function __construct()
-	{
-		$this->io = new \Symfony\Component\Filesystem\Filesystem;
-	}
+	private $settings;
 
 
 
 	/**
-	 * @return Widget\JQueryUIWidget
+	 * @param \JedenWeb\Plupload\Magic $magic
+	 * @param \JedenWeb\Plupload\Uploaders\IUploader $uploader
+	 * @param \JedenWeb\Plupload\Settings $settings
 	 */
-	public function getComponent()
-	{
-		return new Widget\JQueryUIWidget($this);
-	}
-
-
-
-	/*********************** magic ***********************/
-
-
-
-	/**
-	 * @return bool
-	 */
-	public function isMagical()
-	{
-		return (bool) $this->useMagic;
-	}
-
-
-
-	/**
-	 * @return Plupload  provides fluent interface
-	 */
-	public function disableMagic()
-	{
-		$this->useMagic = FALSE;
-		return $this;
-	}
-
-
-
-	/*********************** setters ***********************/
-
-
-
-	/**
-	 * @param string $dir
-	 * @return Plupload  provides fluent interface
-	 */
-	public function setWwwDir($dir)
-	{
-		$this->wwwDir = $dir;
-		return $this;
-	}
-
-
-
-	/**
-	 * @param string $basePath
-	 * @return Plupload  provides fluent interface
-	 */
-	public function setBasePath($basePath)
-	{
-		$this->basePath = $basePath;
-		return $this;
-	}
-
-
-
-	/**
-	 * @param string $dir
-	 * @return Plupload  provides fluent interface
-	 */
-	public function setResourcesDir($dir)
-	{
-		if (!file_exists($dir)) {
-			$this->io->mkdir($dir);
-		}
-		
-		$this->resourcesDir = $dir;
-		return $this;
-	}
-
-
-
-	/*********************** getters ***********************/
-
-
-
-	/**
-	 * @return string
-	 */
-	public function getResourcesDir()
-	{
-		if ($this->isMagical()) {
-			if(!file_exists($this->resourcesDir . '/copied')) {
-				$this->io->mirror(__DIR__ . '/front', $this->resourcesDir, NULL, array('override' => TRUE));
-			}
-		}
-
-		return $this->basePath.str_replace($this->wwwDir, '', $this->resourcesDir);
+	public function __construct(
+		Magic $magic,
+		Uploaders\IUploader $uploader,
+		Settings $settings
+	) {
+		$this->magic = $magic;
+		$this->uploader = $uploader;
+		$this->settings = $settings;
 	}
 
 	
 
 	/**
-	 * @return Uploaders\IUploader
+	 * 
 	 */
-	public function getUploader()
-	{
-		if ($this->uploader === NULL) {
-			$this->uploader = new Uploaders\DefaultUploader($this->io);
-		}
-		
-		return $this->uploader;
-	}	
-	
-
-
-	/**
-	 * @return PluploadSettings
-	 */
-	public function getSettings()
-	{
-		if ($this->pluploadSettings === NULL) {
-			$this->pluploadSettings = new PluploadSettings;
-		}
-		
-		return $this->pluploadSettings;
-	}
-
-
-
-	/*********************** upload ***********************/
-
-
-
-	public function upload()
+	public function handleUpload()
 	{
 		$this->uploader->upload();
 	}
 
 
 
-	/*********************** helpers ***********************/
-
-
-
 	/**
-	 * @param string $source
-	 * @param string $dest
-	 * @param bool $override
+	 * @param string $token
 	 */
-	public static function copy($source, $dest, $override = true)
+	public function render($token = NULL)
 	{
-		$source = new \Kdyby\Filesystem\Dir($source);
-		return $source->mirror($source, $dest, NULL, array('override' => $override));
+		if ($token === NULL) {
+			$token = \Nette\Utils\Strings::random();
+		}
+		
+		$this->template->settings = $this->settings;
+		$this->template->magic = $this->magic;
+		$this->template->token = $token;
+
+		$this->template->setFile(__DIR__ . '/templates/default.latte');
+		$this->template->render();
 	}
+	
+	
+	
+	/**
+	 * @return Uploaders\IUploader
+	 */
+	public function getUploader()
+	{
+		return $this->uploader;
+	}	
 
 }

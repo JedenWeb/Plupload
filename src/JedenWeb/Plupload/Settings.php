@@ -12,22 +12,16 @@ use Nette;
  * @package Plupload component
  * @license New BSD License
  */
-class PluploadSettings extends Nette\Object
+class Settings extends Nette\Object
 {
 
-	/**
-	 * @var array
-	 */
-	private $runtimes;
+	/** @var array */
+	private $runtimes = array('html5');
 
-	/**
-	 * @var string
-	 */
+	/** @var string */
 	private $maxFileSize;
 
-	/**
-	 * @var string
-	 */
+	/** @var string */
 	private $maxChunkSize;
 
 
@@ -35,10 +29,9 @@ class PluploadSettings extends Nette\Object
 	/*********************** setters ***********************/
 
 
-
 	/**
 	 * @param string|array $runtimes
-	 * @return PluploadSettings  provides fluent interface
+	 * @return Settings  provides fluent interface
 	 * @throws Nette\InvalidArgumentException
 	 */
 	public function setRuntimes($runtimes)
@@ -49,8 +42,8 @@ class PluploadSettings extends Nette\Object
 		
 		$possible = array('gears', 'flash', 'silverlight', 'browserplus', 'html5');
 		
-		if (!empty(array_intersect($runtimes, $possible))) {
-			throw new Nette\InvalidArgumentException('There is no runtime called: '.$runtime);
+		if (($invalid = array_diff($runtimes, $possible)) !== array()) {
+			throw new Nette\InvalidArgumentException('There is no runtime called: '. implode(', ', $invalid));
 		}
 		
 		$this->runtimes = $runtimes;
@@ -84,15 +77,15 @@ class PluploadSettings extends Nette\Object
 
 
 	/*********************** getters ***********************/
-
-
+	
+	
 
 	/**
 	 * @return array
 	 */
 	public function getRuntimes()
 	{
-		return $this->runtimes;
+		return (array) $this->runtimes;
 	}
 
 

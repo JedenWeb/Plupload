@@ -7,60 +7,50 @@ use Nette;
 /**
  * @author Pavel Jurásek <jurasekpavel@ctyrimedia.cz>
  */
-class PluploadExtension extends Nette\Config\CompilerExtension
+class PluploadExtension extends Nette\DI\CompilerExtension
 {
 	
-	/** @var array */
+	/**
+	 * @var array
+	 */
 	private $defauls = array(
-		'uploader' => 'JedenWeb\Plupload\Uploaders\DefaultUploader',
-		'settings' => array(
-			'runtimes' => array(
-				'html5'
-			),
-			'maxFileSize' => '10mb',
-			'maxChunkSize' => '1mb',
-		),
 		'resourcesDir' => '%wwwDir%/mfu',
+		'tempDir' => '%tempDir%/upload',
 		'magic' => TRUE,
+		'runtimes' => array(
+			'html5',
+		),
+		'maxFileSize' => '10mb',
+		'maxChunkSize' => '1mb',
 	);
 	
 	
+	/**
+	 * 
+	 */
 	public function loadConfiguration()
 	{
 		$config = $this->getConfig($this->defauls);
 		$container = $this->getContainerBuilder();
 		
 		$container->addDefinition($this->prefix('uploader'))
-				->setClass($config['uploader'])
-				->addSetup('setTempDir', array('%tempDir%/upload'));
+				->setClass('JedenWeb\Plupload\Uploaders\DefaultUploader', array($config['tempDir']));
 		
 		$container->addDefinition($this->prefix('settings'))
-				->setClass('JedenWeb\Plupload\PluploadSettings')
-				->addSetup('setRuntimes', array($config['settings']['runtimes']))
-				->addSetup('setMaxFileSize', array());
+				->setClass('JedenWeb\Plupload\Settings')
+				->addSetup('setRuntimes', array($config['runtimes']))
+				->addSetup('setMaxFileSize', array($config['maxFileSize']))
+				->addSetup('setMaxChunkSize', array($config['maxChunkSize']));
 		
 		$container->addDefinition($this->prefix('plupload'))
-				->setClass('JedenWeb\Plupload\Plupload')
-				->addSetup('setWwwDir', array('%wwwDir%'))
-				->addSetup('setResourcesDir', array($config['resourcesDir']));
+				->setClass('JedenWeb\Plupload\Plupload');
 		
-		$container->addDefinition($this->prefix('widget'))
-				->setClass('JedenWeb\Plupload\Widget\JQueryUIWidget');
-	}
-	
-	
-	/**
-	 * @param Nette\Utils\PhpGenerator\ClassType $class
-	 */
-	public function afterCompile(Nette\Utils\PhpGenerator\ClassType $class)
-	{
-		$config = $this->getConfig($this->defauls);
-		$initialize = $class->methods['initialize'];
+		$container->addDefinition($this->prefix('magic'))
+				->setClass('JedenWeb\Plupload\Magic', array($container->parameters['wwwDir'], $config['resourcesDir']));
 		
-		$initialize->addBody('$this->getService(?)->setBasePath($this->application->presenter->template->basePath);', array("$this->name.plupload"));
-		
-		if ($config['magic'] === FALSE) {
-			$initialize->addBody('$this->getService(?)->disableMagic()', array("$this->name.plupload"));
+		if ($config['magic'] === TRUE) {
+			$container->getDefinition($this->prefix('magic'))
+					->addSetup('cast');
 		}
 	}
 	

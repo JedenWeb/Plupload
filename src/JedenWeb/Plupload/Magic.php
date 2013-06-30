@@ -14,11 +14,11 @@ use Nette;
  */
 class Magic extends Nette\Object
 {
-
-	/**
-	 * @var string
+	
+	/** 
+	 * @var bool 
 	 */
-	private $resourcesDir;
+	private $useMagic = FALSE;
 
 	/**
 	 * @var array
@@ -29,22 +29,79 @@ class Magic extends Nette\Object
 	 * @var array
 	 */
 	public $loadedCss = array();
+	
+	/** 
+	 * @var string 
+	 */
+	private $fullPath;
+	
+	/** 
+	 * @var string 
+	 */
+	private $resourcesDir;
+	
+	/** 
+	 * @var \Symfony\Component\Filesystem\Filesystem 
+	 */
+	private $io;
 
-
-
-
-	/*********************** setters ***********************/
-
-
+	
 
 	/**
 	 * @param string $resourcesDir
-	 * @return \PavelJurasek\Plupload\Magic
+	 * @param \Symfony\Component\Filesystem\Filesystem $io
 	 */
-	public function setResourcesDir($resourcesDir)
-	{
-		$this->resourcesDir = $resourcesDir;
+	public function __construct(
+		$wwwDir, 
+		$resourcesDir,
+		Nette\Http\Request $httpRequest,
+		\Symfony\Component\Filesystem\Filesystem $io = NULL
+	) {
+		if ($io === NULL) {
+			$io = new \Symfony\Component\Filesystem\Filesystem;
+		}
+		
+		$this->io = $io;
+		$this->fullPath = $resourcesDir;
+		$basePath = preg_replace('#https?://[^/]+#A', '', rtrim($httpRequest->getUrl()->getBaseUrl(), '/'));
+		
+		$this->resourcesDir = $basePath.str_replace($wwwDir, '', $resourcesDir);
+	}
+	
+	
+	/**
+	 * @return Magic  provides fluent interface
+	 */
+	public function cast()
+	{		
+		if (!file_exists($this->fullPath)) {
+			$this->io->mkdir($this->fullPath);
+		}		
+		
+		if (!file_exists($this->fullPath . '/copied')) {
+			$this->io->mirror(__DIR__ . '/front', $this->fullPath, NULL, array('override' => TRUE));
+		}
+		
+		$this->useMagic = TRUE;
 		return $this;
+	}
+	
+	
+	/**
+	 * @return bool
+	 */
+	public function isMagical()
+	{
+		return $this->useMagic;
+	}
+	
+	
+	/**
+	 * @return string
+	 */
+	public function getResourcesDir()
+	{
+		return $this->resourcesDir;
 	}
 
 

@@ -1,4 +1,4 @@
-{if $isMagical}
+{if $magic->isMagical()}
 	{!$magic->registerJs('/js/plupload.full.js')}
 	{!$magic->registerJs('/js/jquery.ui.plupload.js')}
 
@@ -10,9 +10,9 @@
 		// Setup gears version
 		$("#uploader-{!$token}").plupload({
 			// General settings
-			runtimes : {implode(',', $pluploadSettings->getRuntimes())},
+			runtimes : {implode(',', $settings->runtimes)},
 			url : {link Upload!},
-			max_file_size : {$pluploadSettings->getMaxFilesize()},
+			max_file_size : {$settings->maxFileSize},
 			headers: {'X-Requested-With': 'XMLHttpRequest'},
 			init : {
 				// Called when a file has finished uploading
@@ -48,13 +48,13 @@
 					}
 				}
 			},
-			chunk_size : {$pluploadSettings->getMaxChunkSize()},
-			flash_swf_url : "{!$resourcesDir}/swf/plupload.flash.swf",
-			silverlight_xap_url : "{!$resourcesDir}/xap/plupload.silverlight.xap"
+			chunk_size : {$settings->maxChunkSize},
+			flash_swf_url : "{!$magic->resourcesDir}/swf/plupload.flash.swf",
+			silverlight_xap_url : "{!$magic->resourcesDir}/xap/plupload.silverlight.xap"
 		});
 	});
 </script>
 
 <div class="plupload" id="uploader-{!$token}" style="width: 750px; height: 330px;">
-	There is no support for any of these: {implode(',', $pluploadSettings->getRuntimes())}
+	There is no support for any of these: {implode(',', $settings->runtimes)}
 </div>

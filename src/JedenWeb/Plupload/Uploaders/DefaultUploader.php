@@ -18,17 +18,17 @@ class DefaultUploader extends Nette\Object implements IUploader
 	/**
 	 * @var array
 	 */
-	public $onSuccess;
+	public $onSuccess = array();
 
 	/**
 	 * @var string
 	 */
-	public $tempDir;
+	private $tempDir;
 
 	/**
 	 * @var string
 	 */
-	public $token;
+	private $token;
 	
 	/**
 	 * @var \Symfony\Component\Filesystem\Filesystem
@@ -38,15 +38,21 @@ class DefaultUploader extends Nette\Object implements IUploader
 	
 	
 	/**
+	 * @param string $tempDir
 	 * @param \Symfony\Component\Filesystem\Filesystem $io
 	 */
-	public function __construct(\Symfony\Component\Filesystem\Filesystem $io = NULL)
+	public function __construct($tempDir, \Symfony\Component\Filesystem\Filesystem $io = NULL)
 	{
 		if ($io === NULL) {
 			$io = new \Symfony\Component\Filesystem\Filesystem;
 		}
-		
 		$this->io = $io;
+		
+		if (!$io->exists($tempDir)) {
+			$io->mkdir($tempDir);
+		}
+		
+		$this->tempDir = $tempDir;
 	}
 
 	
@@ -68,23 +74,6 @@ class DefaultUploader extends Nette\Object implements IUploader
 	/*********************** setters ***********************/
 
 
-
-	/**
-	 * @param string $dir
-	 * @return DefaultUploader  provides fluent interface
-	 */
-	public function setTempDir($dir)
-	{
-		if (!$this->io->exists($dir)) {
-			$this->io->mkdir($dir);
-		}
-		
-		$this->tempDir = $dir;
-		return $this;
-	}
-
-
-
 	/**
 	 * @param string $token
 	 * @return DefaultUploader  provides fluent interface
@@ -98,7 +87,6 @@ class DefaultUploader extends Nette\Object implements IUploader
 		$this->token = md5($token);
 		return $this;
 	}
-
 
 
 	/*********************** IUploader ***********************/
