@@ -20,36 +20,35 @@ Usage
 
 	/**
 	 * @param string $name
-	 * @return \Echo511\Plupload\Widget\JQueryUIWidget
+	 * @return \JedenWeb\Plupload\Widget\JQueryUIWidget
 	 */
-    public function createComponentPlupload($name)
-    {
-        $uploader = new \JedenWeb\Plupload\Plupload();
+	public function createComponentPlupload($name)
+	{
+		$uploader = new \JedenWeb\Plupload\Plupload;
 
-        // $uploader->disableMagic();
+		// $uploader->disableMagic();
 
-        $uploader->setWwwDir(WWW_DIR) // Full path to your frontend directory
-                 ->setBasePath($this->template->basePath) // BasePath provided by Nette
-                 ->setResourcesDir(WWW_DIR . '/mfu'); // Full path to the resources location (js, css)
+		$uploader->setWwwDir(WWW_DIR) // Full path to your frontend directory
+				 ->setBasePath($this->template->basePath) // BasePath provided by Nette
+				 ->setResourcesDir(WWW_DIR . '/mfu'); // Full path to the resources location (js, css)
 
-        $uploader->getSettings()
-                 ->setRuntimes(array('html5')) // Available: gears, flash, silverlight, browserplus, html5
-                 ->setMaxFileSize('1000mb')
-                 ->setMaxChunkSize('1mb');
+		$uploader->getSettings()
+				 ->setRuntimes(array('html5')) // Available: gears, flash, silverlight, browserplus, html5
+				 ->setMaxFileSize('1000mb')
+				 ->setMaxChunkSize('1mb');
 
-        $uploader->getUploader()
-                 ->setTempDir(WWW_DIR . '/../temp') // Where should be placed temporary files
-                 ->onSuccess[] = callback($this, 'handleUploadFile');
+		$uploader->getUploader()
+				 ->setTempDir(WWW_DIR . '/../temp/upload') // Where should be placed temporary files
+				 ->onSuccess[] = callback($this, 'handleUploadFile');
 
-        return $uploader->getComponent();
-    }
-
-
-
+		return $uploader->getComponent();
+	}
+	
+	
 	/**
 	 * @param \Nette\Http\FileUpload $file
 	 */
 	public function handleUploadFile(\Nette\Http\FileUpload $file)
 	{
-		...
+		$file->move(WWW_DIR . '/media/upload/'. $file->getSanitizedName());
 	}
