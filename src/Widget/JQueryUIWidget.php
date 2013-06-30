@@ -12,7 +12,7 @@ use Nette;
  * @package Plupload component
  * @license New BSD License
  */
-class JQueryUIWidget extends \Nette\Application\UI\Control
+class JQueryUIWidget extends Nette\Application\UI\Control
 {
 
 	/**

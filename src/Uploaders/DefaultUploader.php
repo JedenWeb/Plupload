@@ -12,7 +12,7 @@ use Nette;
  * @package Plupload component
  * @license New BSD License
  */
-class DefaultUploader extends \Nette\Object implements IUploader
+class DefaultUploader extends Nette\Object implements IUploader
 {
 
 	/**
