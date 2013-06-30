@@ -29,8 +29,27 @@ class DefaultUploader extends \Nette\Object implements IUploader
 	 * @var string
 	 */
 	public $token = 'eufwd';
+	
+	/**
+	 * @var \Symfony\Component\Filesystem\Filesystem
+	 */
+	private $io;
 
+	
+	
+	/**
+	 * @param \Symfony\Component\Filesystem\Filesystem $io
+	 */
+	public function __construct(\Symfony\Component\Filesystem\Filesystem $io = NULL)
+	{
+		if ($io === NULL) {
+			$io = new \Symfony\Component\Filesystem\Filesystem;
+		}
+		
+		$this->io = $io;
+	}
 
+	
 
 	/**
 	 * @return bool
@@ -52,11 +71,15 @@ class DefaultUploader extends \Nette\Object implements IUploader
 
 	/**
 	 * @param string $dir
-	 * @return \PavelJurasek\Plupload\Uploaders\DefaultUploader
+	 * @return DefaultUploader  provides fluent interface
 	 */
 	public function setTempDir($dir)
 	{
-		$this->tempDir = $this->returnDir($dir);
+		if (!$this->io->exists($dir)) {
+			$this->io->mkdir($dir);
+		}
+		
+		$this->tempDir = $dir;
 		return $this;
 	}
 
@@ -64,7 +87,7 @@ class DefaultUploader extends \Nette\Object implements IUploader
 
 	/**
 	 * @param string $token
-	 * @return \PavelJurasek\Plupload\Uploaders\DefaultUploader
+	 * @return DefaultUploader  provides fluent interface
 	 */
 	public function setToken($token = null)
 	{
@@ -192,26 +215,6 @@ class DefaultUploader extends \Nette\Object implements IUploader
 			$this->onSuccess($upload);
 
 			@unlink($filePath);
-		}
-	}
-
-
-
-	/*********************** helpers ***********************/
-
-
-
-	/**
-	 * @param string $dir
-	 * @return string
-	 */
-	private function returnDir($dir)
-	{
-		if( is_dir($dir) ) {
-			return $dir;
-		} else {
-			mkdir($dir, 0, true);
-			return $dir;
 		}
 	}
 

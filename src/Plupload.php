@@ -44,16 +44,29 @@ class Plupload extends \Nette\Object
 	 * @var bool
 	 */
 	private $useMagic = true;
+	
+	/**
+	 * @var \Symfony\Component\Filesystem\Filesystem
+	 */
+	private $io;
+	
+	
+	
+	/**
+	 */
+	public function __construct()
+	{
+		$this->io = new \Symfony\Component\Filesystem\Filesystem;
+	}
 
 
 
 	/**
-	 * @param string $class
-	 * @return \PavelJurasek\Plupload\class
+	 * @return Widget\JQueryUIWidget
 	 */
-	public function getComponent($class = '\PavelJurasek\Plupload\Widget\JQueryUIWidget')
+	public function getComponent()
 	{
-		return new $class($this);
+		return new Widget\JQueryUIWidget($this);
 	}
 
 
@@ -73,11 +86,11 @@ class Plupload extends \Nette\Object
 
 
 	/**
-	 * @return \PavelJurasek\Plupload\Plupload
+	 * @return Plupload  provides fluent interface
 	 */
 	public function disableMagic()
 	{
-		$this->useMagic = false;
+		$this->useMagic = FALSE;
 		return $this;
 	}
 
@@ -89,7 +102,7 @@ class Plupload extends \Nette\Object
 
 	/**
 	 * @param string $dir
-	 * @return \PavelJurasek\Plupload\Plupload
+	 * @return Plupload  provides fluent interface
 	 */
 	public function setWwwDir($dir)
 	{
@@ -101,7 +114,7 @@ class Plupload extends \Nette\Object
 
 	/**
 	 * @param string $basePath
-	 * @return \PavelJurasek\Plupload\Plupload
+	 * @return Plupload  provides fluent interface
 	 */
 	public function setBasePath($basePath)
 	{
@@ -113,35 +126,15 @@ class Plupload extends \Nette\Object
 
 	/**
 	 * @param string $dir
-	 * @return \PavelJurasek\Plupload\Plupload
+	 * @return Plupload  provides fluent interface
 	 */
 	public function setResourcesDir($dir)
 	{
-		$this->resourcesDir = $this->returnDir($dir);
-		return $this;
-	}
-
-
-
-	/**
-	 * @param \PavelJurasek\Plupload\PluploadSettings $settings
-	 * @return \PavelJurasek\Plupload\Plupload
-	 */
-	public function setPluploadSettings(PluploadSettings $settings)
-	{
-		$this->pluploadSettings = $settings;
-		return $this;
-	}
-
-
-
-	/**
-	 * @param \PavelJurasek\Plupload\Uploaders\IUploader $uploader
-	 * @return \PavelJurasek\Plupload\Plupload
-	 */
-	public function setUploader(Uploaders\IUploader $uploader)
-	{
-		$this->uploader = $uploader;
+		if (!file_exists($dir)) {
+			$this->io->mkdir($dir);
+		}
+		
+		$this->resourcesDir = $dir;
 		return $this;
 	}
 
@@ -156,52 +149,41 @@ class Plupload extends \Nette\Object
 	 */
 	public function getResourcesDir()
 	{
-		if($this->isMagical()) {
-			if(!file_exists($this->resourcesDir . '/copied'))
-				self::copy(__DIR__ . '/front', $this->resourcesDir);
+		if ($this->isMagical()) {
+			if(!file_exists($this->resourcesDir . '/copied')) {
+				$this->io->mirror(__DIR__ . '/front', $this->resourcesDir, NULL, array('override' => TRUE));
+			}
 		}
 
 		return $this->basePath.str_replace($this->wwwDir, '', $this->resourcesDir);
 	}
 
+	
+
+	/**
+	 * @return Uploaders\IUploader
+	 */
+	public function getUploader()
+	{
+		if ($this->uploader === NULL) {
+			$this->uploader = new Uploaders\DefaultUploader($this->io);
+		}
+		
+		return $this->uploader;
+	}	
+	
 
 
 	/**
 	 * @return PluploadSettings
 	 */
-	public function getPluploadSettings()
+	public function getSettings()
 	{
+		if ($this->pluploadSettings === NULL) {
+			$this->pluploadSettings = new PluploadSettings;
+		}
+		
 		return $this->pluploadSettings;
-	}
-
-
-
-	/*********************** factories ***********************/
-
-
-
-	/**
-	 * @param string $class
-	 * @return \PavelJurasek\Plupload\class
-	 */
-	public function createSettings($class = '\PavelJurasek\Plupload\PluploadSettings')
-	{
-		$settings = new $class;
-		$this->setPluploadSettings($settings);
-		return $settings;
-	}
-
-
-
-	/**
-	 * @param string $class
-	 * @return \PavelJurasek\Plupload\class
-	 */
-	public function createUploader($class = '\PavelJurasek\Plupload\Uploaders\DefaultUploader')
-	{
-		$uploader = new $class;
-		$this->setUploader($uploader);
-		return $uploader;
 	}
 
 
@@ -222,44 +204,14 @@ class Plupload extends \Nette\Object
 
 
 	/**
-	 * @param string $dir
-	 * @return string
-	 */
-	private function returnDir($dir)
-	{
-		if( is_dir($dir) ) {
-			return $dir;
-		} else {
-			if($this->isMagical())
-				mkdir($dir, 0, true);
-			return $dir;
-		}
-	}
-
-
-
-	/**
 	 * @param string $source
 	 * @param string $dest
-	 * @param bool $overwrite
+	 * @param bool $override
 	 */
-	public static function copy($source, $dest, $overwrite = true)
+	public static function copy($source, $dest, $override = true)
 	{
-		$dir = opendir($source);
-		@mkdir($dest);
-		while(false !== ($file = readdir($dir))) {
-			if (($file != '.') && ($file != '..')) {
-				if(is_dir($source . '/' . $file)) {
-					self::copy($source . '/' . $file, $dest . '/' . $file);
-
-				} else {
-					if($overwrite || !file_exists($dest . '/' . $file)) {
-						copy($source . '/' . $file, $dest . '/' . $file);
-					}
-				}
-			}
-		}
-		closedir($dir);
+		$source = new \Kdyby\Filesystem\Dir($source);
+		return $source->mirror($source, $dest, NULL, array('override' => $override));
 	}
 
 }

@@ -16,16 +16,16 @@ class JQueryUIWidget extends \Nette\Application\UI\Control
 {
 
 	/**
-	 * @var \PavelJurasek\Plupload\Plupload
+	 * @var \JedenWeb\Plupload\Plupload
 	 */
 	private $plupload;
 
 
 
 	/**
-	 * @param \PavelJurasek\Plupload\Plupload $plupload
+	 * @param \JedenWeb\Plupload\Plupload $plupload
 	 */
-	public function __construct(\PavelJurasek\Plupload\Plupload $plupload)
+	public function __construct(\JedenWeb\Plupload\Plupload $plupload)
 	{
 		$this->plupload = $plupload;
 	}
@@ -51,7 +51,7 @@ class JQueryUIWidget extends \Nette\Application\UI\Control
 
 
 		if ($this->plupload->isMagical()) {
-			$magic = new \PavelJurasek\Plupload\Magic;
+			$magic = new \JedenWeb\Plupload\Magic;
 			$magic->setResourcesDir($this->plupload->resourcesDir);
 			$this->template->magic = $magic;
 		}
