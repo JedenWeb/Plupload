@@ -42,10 +42,14 @@ class JQueryUIWidget extends Nette\Application\UI\Control
 	/**
 	 * @param string $token
 	 */
-	public function render($token = '1')
+	public function render($token = NULL)
 	{
+		if ($token === NULL) {
+			$token = \Nette\Utils\Strings::random();
+		}
+		
 		$this->template->resourcesDir = $this->plupload->resourcesDir;
-		$this->template->pluploadSettings = $this->plupload->pluploadSettings;
+		$this->template->pluploadSettings = $this->plupload->settings;
 		$this->template->isMagical = $this->plupload->isMagical();
 		$this->template->token = $token;
 

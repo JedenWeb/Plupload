@@ -28,7 +28,7 @@ class DefaultUploader extends Nette\Object implements IUploader
 	/**
 	 * @var string
 	 */
-	public $token = 'eufwd';
+	public $token;
 	
 	/**
 	 * @var \Symfony\Component\Filesystem\Filesystem
