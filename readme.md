@@ -24,7 +24,7 @@ Usage
 	 */
     public function createComponentPlupload($name)
     {
-        $uploader = new Echo511\Plupload\Plupload();
+        $uploader = new \JedenWeb\Plupload\Plupload();
 
         // $uploader->disableMagic();
 
@@ -32,12 +32,12 @@ Usage
                  ->setBasePath($this->template->basePath) // BasePath provided by Nette
                  ->setResourcesDir(WWW_DIR . '/mfu'); // Full path to the resources location (js, css)
 
-        $uploader->createSettings()
+        $uploader->getSettings()
                  ->setRuntimes(array('html5')) // Available: gears, flash, silverlight, browserplus, html5
                  ->setMaxFileSize('1000mb')
                  ->setMaxChunkSize('1mb');
 
-        $uploader->createUploader()
+        $uploader->getUploader()
                  ->setTempDir(WWW_DIR . '/../temp') // Where should be placed temporary files
                  ->onSuccess[] = callback($this, 'handleUploadFile');
 
