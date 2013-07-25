@@ -11,6 +11,9 @@ namespace JedenWeb\Plupload\Uploaders;
 interface IUploader
 {
 
+	/**
+	 * Handles file upload.
+	 */
 	public function upload();
 
 }

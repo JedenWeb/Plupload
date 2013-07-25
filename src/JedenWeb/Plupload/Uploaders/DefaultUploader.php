@@ -26,7 +26,6 @@ class DefaultUploader extends Nette\Object implements IUploader
 	
 	/**
 	 * @param string $tempDir
-	 * @param \Symfony\Component\Filesystem\Filesystem $io
 	 */
 	public function __construct($tempDir)
 	{
@@ -71,6 +70,11 @@ class DefaultUploader extends Nette\Object implements IUploader
 
 
 
+	/**
+	 * Handles file upload.
+	 * 
+	 * @throws Nette\InvalidStateException
+	 */
 	public function upload()
 	{
 		if (!$this->isReady()) {
