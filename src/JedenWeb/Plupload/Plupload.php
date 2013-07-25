@@ -70,7 +70,7 @@ class Plupload extends Nette\Application\UI\Control
 		$this->template->magic = $this->magic;
 		$this->template->token = $token;
 
-		$this->template->setFile(__DIR__ . '/templates/default.latte');
+		$this->template->setFile(__DIR__ . '/template.latte');
 		$this->template->render();
 	}
 	
