@@ -29,11 +29,6 @@ class DefaultUploader extends Nette\Object implements IUploader
 	 * @var string
 	 */
 	private $token;
-	
-	/**
-	 * @var \Symfony\Component\Filesystem\Filesystem
-	 */
-	private $io;
 
 	
 	
@@ -41,16 +36,9 @@ class DefaultUploader extends Nette\Object implements IUploader
 	 * @param string $tempDir
 	 * @param \Symfony\Component\Filesystem\Filesystem $io
 	 */
-	public function __construct($tempDir, \Symfony\Component\Filesystem\Filesystem $io = NULL)
+	public function __construct($tempDir)
 	{
-		if ($io === NULL) {
-			$io = new \Symfony\Component\Filesystem\Filesystem;
-		}
-		$this->io = $io;
-		
-		if (!$io->exists($tempDir)) {
-			$io->mkdir($tempDir);
-		}
+		Nette\Utils\FileSystem::createDir($tempDir);
 		
 		$this->tempDir = $tempDir;
 	}

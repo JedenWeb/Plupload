@@ -18,8 +18,7 @@
 	},
 	"require":{
 		"php":">=5.3.0",
-		"nette/nette":"*",
-		"kdyby/filesystem": "dev-master"
+		"nette/nette":"*"
 	},
 	"support": {
         "issues":"https://github.com/paveljurasek/plupload/issues"
