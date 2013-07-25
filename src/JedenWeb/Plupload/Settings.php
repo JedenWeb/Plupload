@@ -7,10 +7,8 @@ use Nette;
 /**
  * This file is a part of Plupload component for Nette Framework.
  *
- * @author Nikolas Tsiongas
  * @author Pavel Jurásek <jurasekpavel@ctyrimedia.cz>
- * @package Plupload component
- * @license New BSD License
+ * @author Nikolas Tsiongas
  */
 class Settings extends Nette\Object
 {

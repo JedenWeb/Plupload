@@ -1,5 +1,7 @@
-Plupload component for Nette
+Plupload for Nette
 ============================
+
+Originaly from Nikolas Tsiongas, new BSD License.
 
 Implementation:
 ---------------
