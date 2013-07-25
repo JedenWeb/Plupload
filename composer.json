@@ -25,7 +25,7 @@
     },
 	"autoload": {
 		"psr-0": {
-			"jedenweb\\Plupload": "src"
+			"JedenWeb": "src"
 		}
 	}
 }
