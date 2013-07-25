@@ -3,6 +3,7 @@
 namespace JedenWeb\Plupload;
 
 use Nette;
+use Nette\Http\Request;
 
 /**
  * This file is a part of Plupload component for Nette Framework.
@@ -27,32 +28,19 @@ class Magic extends Nette\Object
 	
 	/** @var string */
 	private $resourcesDir;
-	
-	/** 
-	 * @var \Symfony\Component\Filesystem\Filesystem 
-	 */
-	private $io;
 
 	
 
 	/**
+	 * @param string $wwwDir
 	 * @param string $resourcesDir
-	 * @param \Symfony\Component\Filesystem\Filesystem $io
+	 * @param \Nette\Http\Request $httpRequest
 	 */
-	public function __construct(
-		$wwwDir, 
-		$resourcesDir,
-		Nette\Http\Request $httpRequest,
-		\Symfony\Component\Filesystem\Filesystem $io = NULL
-	) {
-		if ($io === NULL) {
-			$io = new \Symfony\Component\Filesystem\Filesystem;
-		}
-		
-		$this->io = $io;
+	public function __construct($wwwDir, $resourcesDir, Request $httpRequest)
+	{
 		$this->fullPath = $resourcesDir;
-		$basePath = preg_replace('#https?://[^/]+#A', '', rtrim($httpRequest->getUrl()->getBaseUrl(), '/'));
 		
+		$basePath = preg_replace('#https?://[^/]+#A', '', rtrim($httpRequest->getUrl()->getBaseUrl(), '/'));
 		$this->resourcesDir = $basePath.str_replace($wwwDir, '', $resourcesDir);
 	}
 	
@@ -62,13 +50,11 @@ class Magic extends Nette\Object
 	 * @return Magic  provides fluent interface
 	 */
 	public function cast()
-	{		
-		if (!file_exists($this->fullPath)) {
-			$this->io->mkdir($this->fullPath);
-		}		
+	{
+		Nette\Utils\FileSystem::createDir($this->fullPath);
 		
 		if (!file_exists($this->fullPath . '/copied')) {
-			$this->io->mirror(__DIR__ . '/front', $this->fullPath, NULL, array('override' => TRUE));
+			Nette\Utils\FileSystem::copy(__DIR__ . '/resources', $this->fullPath);
 		}
 		
 		$this->useMagic = TRUE;
