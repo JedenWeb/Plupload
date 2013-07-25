@@ -10,9 +10,7 @@ use Nette;
 class PluploadExtension extends Nette\DI\CompilerExtension
 {
 	
-	/**
-	 * @var array
-	 */
+	/** @var array */
 	private $defauls = array(
 		'resourcesDir' => '%wwwDir%/mfu',
 		'tempDir' => '%tempDir%/upload',
@@ -25,8 +23,8 @@ class PluploadExtension extends Nette\DI\CompilerExtension
 	);
 	
 	
+	
 	/**
-	 * 
 	 */
 	public function loadConfiguration()
 	{

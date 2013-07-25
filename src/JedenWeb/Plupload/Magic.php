@@ -13,29 +13,19 @@ use Nette;
 class Magic extends Nette\Object
 {
 	
-	/** 
-	 * @var bool 
-	 */
+	/** @var bool */
 	private $useMagic = FALSE;
 
-	/**
-	 * @var array
-	 */
+	/** @var array */
 	public $loadedJs = array();
 
-	/**
-	 * @var array
-	 */
+	/** @var array */
 	public $loadedCss = array();
 	
-	/** 
-	 * @var string 
-	 */
+	/** @var string */
 	private $fullPath;
 	
-	/** 
-	 * @var string 
-	 */
+	/** @var string */
 	private $resourcesDir;
 	
 	/** 
@@ -67,6 +57,7 @@ class Magic extends Nette\Object
 	}
 	
 	
+	
 	/**
 	 * @return Magic  provides fluent interface
 	 */
@@ -85,6 +76,7 @@ class Magic extends Nette\Object
 	}
 	
 	
+	
 	/**
 	 * @return bool
 	 */
@@ -92,6 +84,7 @@ class Magic extends Nette\Object
 	{
 		return $this->useMagic;
 	}
+	
 	
 	
 	/**
@@ -103,9 +96,7 @@ class Magic extends Nette\Object
 	}
 
 
-
-	/*********************** loading ***********************/
-
+	
 
 
 	/**

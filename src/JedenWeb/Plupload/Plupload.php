@@ -13,19 +13,13 @@ use Nette;
 class Plupload extends Nette\Application\UI\Control
 {
 
-	/**
-	 * @var Magic
-	 */
+	/** @var Magic */
 	private $magic;
 
-	/** 
-	 * @var Uploaders\IUploader 
-	 */
+	/** @var Uploaders\IUploader */
 	private $uploader;
 
-	/** 
-	 * @var Settings 
-	 */
+	/** @var Settings */
 	private $settings;
 
 
@@ -48,7 +42,7 @@ class Plupload extends Nette\Application\UI\Control
 	
 
 	/**
-	 * 
+	 * Trigger file uploading.
 	 */
 	public function handleUpload()
 	{

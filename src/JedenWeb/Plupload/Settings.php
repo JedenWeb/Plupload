@@ -24,9 +24,6 @@ class Settings extends Nette\Object
 
 
 
-	/*********************** setters ***********************/
-
-
 	/**
 	 * @param string|array $runtimes
 	 * @return Settings  provides fluent interface
@@ -51,30 +48,28 @@ class Settings extends Nette\Object
 
 
 	/**
-	 * @param string $expr
-	 * @return \PavelJurasek\Plupload\PluploadSettings
+	 * @param string $size
+	 * @return \JedenWeb\Plupload\Settings  provides fluent interface
 	 */
-	public function setMaxFileSize($expr)
+	public function setMaxFileSize($size)
 	{
-		$this->maxFileSize = $expr;
+		$this->maxFileSize = $size;
 		return $this;
 	}
 
 
 
 	/**
-	 * @param string $expr
-	 * @return \PavelJurasek\Plupload\PluploadSettings
+	 * @param string $size
+	 * @return \JedenWeb\Plupload\Settings  provides fluent interface
 	 */
-	public function setMaxChunkSize($expr)
+	public function setMaxChunkSize($size)
 	{
-		$this->maxChunkSize = $expr;
+		$this->maxChunkSize = $size;
 		return $this;
 	}
 
 
-
-	/*********************** getters ***********************/
 	
 	
 

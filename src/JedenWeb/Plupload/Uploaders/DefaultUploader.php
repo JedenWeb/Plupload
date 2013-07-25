@@ -13,19 +13,13 @@ use Nette;
 class DefaultUploader extends Nette\Object implements IUploader
 {
 
-	/**
-	 * @var array
-	 */
+	/** @var array */
 	public $onSuccess = array();
 
-	/**
-	 * @var string
-	 */
+	/** @var string */
 	private $tempDir;
 
-	/**
-	 * @var string
-	 */
+	/** @var string */
 	private $token;
 
 	
@@ -55,10 +49,7 @@ class DefaultUploader extends Nette\Object implements IUploader
 		return !(!$this->onSuccess || !$this->tempDir);
 	}
 
-
-
-	/*********************** setters ***********************/
-
+	
 
 	/**
 	 * @param string $token
@@ -74,6 +65,7 @@ class DefaultUploader extends Nette\Object implements IUploader
 		return $this;
 	}
 
+	
 
 	/*********************** IUploader ***********************/
 
