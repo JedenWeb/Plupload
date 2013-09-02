@@ -1,38 +1,44 @@
-Plupload for Nette
-============================
+# Plupload
+
+Simple file uploader for [Nette Framework](http://nette.org/)
 
 Originaly from Nikolas Tsiongas, new BSD License.
 
-Implementation:
----------------
+## Instalation
 
-	{
-		"require" {
-			"paveljurasek/plupload": "dev-master"
-		}
+Plupload requires **jQuery** and **jQueryUI**.
+
+The best way to install jedenweb/images is using  [Composer](http://getcomposer.org/):
+
+
+```json
+{
+	"require" {
+		"jedenweb/plupload": "dev-master"
 	}
+}
+```
 
-Requires jQuery and jQueryUI.
+After that you have to register extension in config.neon.
 
-There is no need for including any extra JS or Css in head. Everything is done automatically. If you prefer doing it yourself then disable magic.
+```neon
+extensions:
+	plupload: JedenWeb\Plupload\DI\PluploadExtension
+```
 
 
-Usage
------
+## Usage
 
-Register extension in config.neon
+### Creating component
 
-	/** 
+In presenter
+
+```php
+	/**
 	 * @inject
 	 * @var \JedenWeb\Plupload\Plupload
 	 */
 	public $plupload;
-
-
-	public function actionDefault()
-	{
-		$this->template->images = \Nette\Utils\Finder::find('*')->from(WWW_DIR . '/media/upload');
-	}
 
 
 	/**
@@ -46,8 +52,8 @@ Register extension in config.neon
 
 		return $this->plupload;
 	}
-	
-	
+
+
 	/**
 	 * @param \Nette\Http\FileUpload $file
 	 */
@@ -57,14 +63,27 @@ Register extension in config.neon
 
 		$this->invalidateControl('images');
 	}
+```
 
+### Dummy way to show uploaded files
 
-In template:
-	
+In presenter
+
+```php
+	public function actionDefault()
+	{
+		$this->template->images = \Nette\Utils\Finder::find('*')->from(WWW_DIR . '/media/upload');
+	}
+```
+
+In template
+
+```latte
 	{control plupload}
 
 	{snippet images}
 		{foreach $images as $image}
-			<img src="{$basePath}/media/upload/{$image->getFilename()}" />
+			&lt;img src="{$basePath}/media/upload/{$image->getFilename()}" /&gt;
 		{/foreach}
 	{/snippet}
+```
