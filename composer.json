@@ -4,7 +4,7 @@
 	"keywords": ["nette", "plupload", "multiple-upload"],
 	"type": "library",
 	"homepage": "https://github.com/paveljurasek/plupload",
-	"license": "BSD-3",
+	"license": ["BSD-3-Clause", "GPL-2.0", "GPL-3.0"],
 	"authors": [
 		{
 			"name":"Pavel Jurasek"
