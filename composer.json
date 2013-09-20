@@ -13,7 +13,7 @@
 		}
 	],
 	"support": {
-		"issues":"https://github.com/paveljurasek/plupload/issues"
+		"issues":"https://github.com/JedenWeb/Plupload/issues"
     },
 	"suggest": {
 		"jedenweb/Images": "*"
