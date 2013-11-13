@@ -17,7 +17,12 @@
 			init : {
 				// Called when a file has finished uploading
 				FileUploaded: function(up, file, info) {
-					var payload = jQuery.parseJSON(info.response);
+					try {
+						var payload = jQuery.parseJSON(info.response);
+					} catch(e) { // invalid json string
+						return;
+					}
+
 					/*
 					 * Code for updating snippets is copied from https://github.com/vojtech-dobes/nette.ajax.js
 					 * @author Vojtěch Dobeš
