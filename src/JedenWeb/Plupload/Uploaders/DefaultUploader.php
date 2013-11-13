@@ -19,8 +19,11 @@ class DefaultUploader extends Nette\Object implements IUploader
 	/** @var string */
 	private $tempDir;
 
-	/** @var string */
-	private $token;
+	/** 
+	 * @deprecated
+	 * @var string
+	 */
+	private $token = 'magictoken';
 
 	
 	
@@ -50,22 +53,6 @@ class DefaultUploader extends Nette\Object implements IUploader
 
 	
 
-	/**
-	 * @param string $token
-	 * @return DefaultUploader  provides fluent interface
-	 */
-	public function setToken($token = null)
-	{
-		if (!$token) {
-			$token = \Nette\Utils\Strings::random();
-		}
-
-		$this->token = md5($token);
-		return $this;
-	}
-
-	
-
 	/*********************** IUploader ***********************/
 
 
@@ -84,7 +71,7 @@ class DefaultUploader extends Nette\Object implements IUploader
 		header("Expires: Mon, 26 Jul 1997 05:00:00 GMT");
 		header("Last-Modified: " . gmdate("D, d M Y H:i:s") . " GMT");
 		header("Cache-Control: no-store, no-cache, must-revalidate");
-		header("Cache-Control: post-check=0, pre-check=0", false);
+		header("Cache-Control: post-check=0, pre-check=0", FALSE);
 		header("Pragma: no-cache");
 
 		$targetDir = realpath($this->tempDir);
@@ -93,8 +80,8 @@ class DefaultUploader extends Nette\Object implements IUploader
 		@set_time_limit(5 * 60);
 
 
-		$chunk = isset($_REQUEST["chunk"]) ? $_REQUEST["chunk"] : 0;
-		$chunks = isset($_REQUEST["chunks"]) ? $_REQUEST["chunks"] : 0;
+		$chunk = isset($_REQUEST["chunk"]) ? (int) $_REQUEST["chunk"] : 0;
+		$chunks = isset($_REQUEST["chunks"]) ? (int) $_REQUEST["chunks"] : 0;
 		$fileName = isset($_REQUEST["name"])
 			? \Nette\Utils\Strings::webalize($_REQUEST["name"], '.')
 			: \Nette\Utils\Strings::random();
@@ -151,7 +138,7 @@ class DefaultUploader extends Nette\Object implements IUploader
 				die('{"jsonrpc" : "2.0", "error" : {"code": 103, "message": "Failed to move uploaded file."}, "id" : "id"}');
 			}
 		} else {
-			$out = fopen($targetDir . DIRECTORY_SEPARATOR . $fileName, $chunk == 0 ? "wb" : "ab");
+			$out = fopen($targetDir . DIRECTORY_SEPARATOR . $fileName, $chunk === 0 ? "wb" : "ab");
 			if ($out) {
 				$in = fopen("php://input", "rb");
 
