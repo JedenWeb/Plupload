@@ -1,3 +1,7 @@
+# Deprecated
+
+Use [original repo](http://github.com/echo511/Plupload) instead.
+
 # Plupload
 
 Simple file uploader for [Nette Framework](http://nette.org/)
