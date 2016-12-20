@@ -2,53 +2,57 @@
 
 namespace JedenWeb\Plupload\DI;
 
-use Nette;
+use JedenWeb\Plupload\Magic;
+use JedenWeb\Plupload\Plupload;
+use JedenWeb\Plupload\Settings;
+use JedenWeb\Plupload\Uploaders\DefaultUploader;
+use Nette\DI\CompilerExtension;
 
 /**
  * @author Pavel Jurásek <jurasekpavel@ctyrimedia.cz>
  */
-class PluploadExtension extends Nette\DI\CompilerExtension
+class PluploadExtension extends CompilerExtension
 {
-	
-	/** @var array */
-	private $defauls = array(
+
+	/**
+	 * @var array
+	 */
+	private $defauls = [
 		'resourcesDir' => '%wwwDir%/mfu',
 		'tempDir' => '%tempDir%/upload',
 		'magic' => TRUE,
-		'runtimes' => array(
+		'runtimes' => [
 			'html5',
-		),
+		],
 		'maxFileSize' => '10mb',
 		'maxChunkSize' => '1mb',
-	);
-	
-	
-	
-	/**
-	 */
+	];
+
+
+	/***/
 	public function loadConfiguration()
 	{
 		$config = $this->getConfig($this->defauls);
 		$container = $this->getContainerBuilder();
 		
 		$container->addDefinition($this->prefix('uploader'))
-				->setClass('JedenWeb\Plupload\Uploaders\DefaultUploader', array($config['tempDir']));
+			->setClass(DefaultUploader::class, [$config['tempDir']]);
 		
 		$container->addDefinition($this->prefix('settings'))
-				->setClass('JedenWeb\Plupload\Settings')
-				->addSetup('setRuntimes', array($config['runtimes']))
-				->addSetup('setMaxFileSize', array($config['maxFileSize']))
-				->addSetup('setMaxChunkSize', array($config['maxChunkSize']));
+			->setClass(Settings::class)
+			->addSetup('setRuntimes', [$config['runtimes']])
+			->addSetup('setMaxFileSize', [$config['maxFileSize']])
+			->addSetup('setMaxChunkSize', [$config['maxChunkSize']]);
 		
 		$container->addDefinition($this->prefix('plupload'))
-				->setClass('JedenWeb\Plupload\Plupload');
+			->setClass(Plupload::class);
 		
 		$container->addDefinition($this->prefix('magic'))
-				->setClass('JedenWeb\Plupload\Magic', array($container->parameters['wwwDir'], $config['resourcesDir']));
+			->setClass(Magic::class, [$container->parameters['wwwDir'], $config['resourcesDir']]);
 		
 		if ($config['magic'] === TRUE) {
 			$container->getDefinition($this->prefix('magic'))
-					->addSetup('cast');
+				->addSetup('cast');
 		}
 	}
 	

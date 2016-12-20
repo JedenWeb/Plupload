@@ -4,6 +4,8 @@ namespace JedenWeb\Plupload;
 
 use Nette;
 use Nette\Http\Request;
+use Nette\Utils\FileSystem;
+use Nette\Utils\Html;
 
 /**
  * This file is a part of Plupload component for Nette Framework.
@@ -18,23 +20,22 @@ class Magic extends Nette\Object
 	private $useMagic = FALSE;
 
 	/** @var array */
-	public $loadedJs = array();
+	public $loadedJs = [];
 
 	/** @var array */
-	public $loadedCss = array();
+	public $loadedCss = [];
 	
 	/** @var string */
 	private $fullPath;
 	
 	/** @var string */
 	private $resourcesDir;
-
 	
 
 	/**
 	 * @param string $wwwDir
 	 * @param string $resourcesDir
-	 * @param \Nette\Http\Request $httpRequest
+	 * @param Request $httpRequest
 	 */
 	public function __construct($wwwDir, $resourcesDir, Request $httpRequest)
 	{
@@ -45,22 +46,21 @@ class Magic extends Nette\Object
 	}
 	
 	
-	
 	/**
 	 * @return Magic  provides fluent interface
 	 */
 	public function cast()
 	{
-		Nette\Utils\FileSystem::createDir($this->fullPath);
+		FileSystem::createDir($this->fullPath);
 		
 		if (!file_exists($this->fullPath . '/copied')) {
-			Nette\Utils\FileSystem::copy(__DIR__ . '/resources', $this->fullPath);
+			FileSystem::copy(__DIR__ . '/resources', $this->fullPath);
 		}
 		
 		$this->useMagic = TRUE;
+
 		return $this;
 	}
-	
 	
 	
 	/**
@@ -72,7 +72,6 @@ class Magic extends Nette\Object
 	}
 	
 	
-	
 	/**
 	 * @return string
 	 */
@@ -82,23 +81,19 @@ class Magic extends Nette\Object
 	}
 
 
-	
-
-
 	/**
 	 * @param string $shortPath
 	 * @return \Nette\Utils\Html
 	 */
 	public function registerJs($shortPath)
 	{
-		if(!in_array($shortPath, $this->loadedJs)) {
+		if (!in_array($shortPath, $this->loadedJs)) {
 			$this->loadedJs[] = $shortPath;
-			return \Nette\Utils\Html::el('script')
-					->type('text/javascript')
-					->src($this->resourcesDir.$shortPath);
+			return Html::el('script')
+				->setAttribute('type', 'text/javascript')
+				->setAttribute('src', $this->resourcesDir.$shortPath);
 		}
 	}
-
 
 
 	/**
@@ -107,12 +102,12 @@ class Magic extends Nette\Object
 	 */
 	public function registerCss($shortPath)
 	{
-		if(!in_array($shortPath, $this->loadedCss)) {
+		if (!in_array($shortPath, $this->loadedCss)) {
 			$this->loadedCss[] = $shortPath;
-			return \Nette\Utils\Html::el('link')
-					->rel('stylesheet')
-					->type('text/css')
-					->href($this->resourcesDir.$shortPath);
+			return Html::el('link')
+				->setAttribute('rel', 'stylesheet')
+				->setAttribute('type', 'text/css')
+				->href($this->resourcesDir.$shortPath);
 		}
 	}
 

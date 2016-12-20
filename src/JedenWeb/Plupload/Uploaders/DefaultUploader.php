@@ -2,29 +2,28 @@
 
 namespace JedenWeb\Plupload\Uploaders;
 
-use Nette;
+use Nette\Http\FileUpload;
+use Nette\SmartObject;
+use Nette\Utils\FileSystem;
 
 /**
- * This file is a part of Plupload component for Nette Framework.
- *
+ * @method void onSuccess(FileUpload $file)
  * @author Pavel Jurásek <jurasekpavel@ctyrimedia.cz>
- * @author Nikolas Tsiongas
  */
-class DefaultUploader extends Nette\Object implements IUploader
+class DefaultUploader implements IUploader
 {
 
-	/** @var array */
-	public $onSuccess = array();
+	use SmartObject;
 
-	/** @var string */
-	private $tempDir;
+	/**
+	 * @var callable[]
+	 */
+	public $onSuccess = [];
 
-	/** 
-	 * @deprecated
+	/**
 	 * @var string
 	 */
-	private $token = 'magictoken';
-
+	private $tempDir;
 	
 	
 	/**
@@ -32,11 +31,10 @@ class DefaultUploader extends Nette\Object implements IUploader
 	 */
 	public function __construct($tempDir)
 	{
-		Nette\Utils\FileSystem::createDir($tempDir);
+		FileSystem::createDir($tempDir);
 		
 		$this->tempDir = $tempDir;
 	}
-
 	
 
 	/**
@@ -44,28 +42,22 @@ class DefaultUploader extends Nette\Object implements IUploader
 	 */
 	public function isReady()
 	{
-		if (!$this->token) {
-			$this->setToken();
-		}
-
-		return !(!$this->onSuccess || !$this->tempDir);
+		return $this->onSuccess && $this->tempDir;
 	}
-
 	
 
 	/*********************** IUploader ***********************/
 
 
-
 	/**
-	 * Handles file upload.
+	 * Handle file upload
 	 * 
-	 * @throws Nette\InvalidStateException
+	 * @throws UploaderNotReadyException
 	 */
 	public function upload()
 	{
 		if (!$this->isReady()) {
-			throw new Nette\InvalidStateException("Uploader is not set up correctly.");
+			throw new UploaderNotReadyException('Uploader is not set up correctly. There is no onSuccess hander or temp directory is not set.');
 		}
 
 		header("Expires: Mon, 26 Jul 1997 05:00:00 GMT");

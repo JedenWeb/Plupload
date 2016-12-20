@@ -2,15 +2,13 @@
 
 namespace JedenWeb\Plupload;
 
-use Nette;
+use Nette\Application\UI\Control;
+use Nette\Utils\Random;
 
 /**
- * This file is a part of Plupload component for Nette Framework.
- *
  * @author Pavel Jurásek <jurasekpavel@ctyrimedia.cz>
- * @author Nikolas Tsiongas
  */
-class Plupload extends Nette\Application\UI\Control
+class Plupload extends Control
 {
 
 	/** @var Magic */
@@ -22,23 +20,27 @@ class Plupload extends Nette\Application\UI\Control
 	/** @var Settings */
 	private $settings;
 
+    /** @var string */
+    private $templateFile;
 
 
 	/**
-	 * @param \JedenWeb\Plupload\Magic $magic
-	 * @param \JedenWeb\Plupload\Uploaders\IUploader $uploader
-	 * @param \JedenWeb\Plupload\Settings $settings
+	 * @param Magic $magic
+	 * @param Uploaders\IUploader $uploader
+	 * @param Settings $settings
 	 */
 	public function __construct(
 		Magic $magic,
 		Uploaders\IUploader $uploader,
 		Settings $settings
 	) {
+		parent::__construct();
+
 		$this->magic = $magic;
 		$this->uploader = $uploader;
 		$this->settings = $settings;
+        $this->templateFile = __DIR__ . '/template.latte';
 	}
-
 	
 
 	/**
@@ -50,6 +52,17 @@ class Plupload extends Nette\Application\UI\Control
 	}
 
 
+    /**
+     * @param string
+     *
+     * @return $this
+     */
+    public function setTemplateFile($templateFile)
+    {
+        $this->templateFile = $templateFile;
+        return $this;
+    }
+
 
 	/**
 	 * @param string $token
@@ -57,17 +70,16 @@ class Plupload extends Nette\Application\UI\Control
 	public function render($token = NULL)
 	{
 		if ($token === NULL) {
-			$token = \Nette\Utils\Strings::random();
+			$token = Random::generate();
 		}
 		
 		$this->template->settings = $this->settings;
 		$this->template->magic = $this->magic;
 		$this->template->token = $token;
 
-		$this->template->setFile(__DIR__ . '/template.latte');
+		$this->template->setFile($this->templateFile);
 		$this->template->render();
 	}
-	
 	
 	
 	/**
