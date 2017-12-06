@@ -13,9 +13,11 @@ use Nette\Utils\Html;
  * @author Pavel Jurásek <jurasekpavel@ctyrimedia.cz>
  * @author Nikolas Tsiongas
  */
-class Magic extends Nette\Object
+class Magic
 {
-	
+
+	use Nette\SmartObject;
+
 	/** @var bool */
 	private $useMagic = FALSE;
 
@@ -24,13 +26,13 @@ class Magic extends Nette\Object
 
 	/** @var array */
 	public $loadedCss = [];
-	
+
 	/** @var string */
 	private $fullPath;
-	
+
 	/** @var string */
 	private $resourcesDir;
-	
+
 
 	/**
 	 * @param string $wwwDir
@@ -40,29 +42,29 @@ class Magic extends Nette\Object
 	public function __construct($wwwDir, $resourcesDir, Request $httpRequest)
 	{
 		$this->fullPath = $resourcesDir;
-		
+
 		$basePath = preg_replace('#https?://[^/]+#A', '', rtrim($httpRequest->getUrl()->getBaseUrl(), '/'));
 		$this->resourcesDir = $basePath.str_replace($wwwDir, '', $resourcesDir);
 	}
-	
-	
+
+
 	/**
 	 * @return Magic  provides fluent interface
 	 */
 	public function cast()
 	{
 		FileSystem::createDir($this->fullPath);
-		
+
 		if (!file_exists($this->fullPath . '/copied')) {
 			FileSystem::copy(__DIR__ . '/resources', $this->fullPath);
 		}
-		
+
 		$this->useMagic = TRUE;
 
 		return $this;
 	}
-	
-	
+
+
 	/**
 	 * @return bool
 	 */
@@ -70,8 +72,8 @@ class Magic extends Nette\Object
 	{
 		return $this->useMagic;
 	}
-	
-	
+
+
 	/**
 	 * @return string
 	 */

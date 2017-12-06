@@ -10,8 +10,10 @@ use Nette;
  * @author Pavel Jurásek <jurasekpavel@ctyrimedia.cz>
  * @author Nikolas Tsiongas
  */
-class Settings extends Nette\Object
+class Settings
 {
+
+	use Nette\SmartObject;
 
 	/** @var array */
 	private $runtimes = array('html5');
@@ -34,13 +36,13 @@ class Settings extends Nette\Object
 		if (is_string($runtimes)) {
 			$runtimes = array($runtimes);
 		}
-		
+
 		$possible = array('gears', 'flash', 'silverlight', 'browserplus', 'html5');
-		
+
 		if (($invalid = array_diff($runtimes, $possible)) !== array()) {
 			throw new Nette\InvalidArgumentException('There is no runtime called: '. implode(', ', $invalid));
 		}
-		
+
 		$this->runtimes = $runtimes;
 		return $this;
 	}
@@ -70,8 +72,8 @@ class Settings extends Nette\Object
 	}
 
 
-	
-	
+
+
 
 	/**
 	 * @return array
