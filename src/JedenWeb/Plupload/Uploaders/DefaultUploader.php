@@ -24,18 +24,18 @@ class DefaultUploader implements IUploader
 	 * @var string
 	 */
 	private $tempDir;
-	
-	
+
+
 	/**
 	 * @param string $tempDir
 	 */
 	public function __construct($tempDir)
 	{
 		FileSystem::createDir($tempDir);
-		
+
 		$this->tempDir = $tempDir;
 	}
-	
+
 
 	/**
 	 * @return bool
@@ -44,14 +44,14 @@ class DefaultUploader implements IUploader
 	{
 		return $this->onSuccess && $this->tempDir;
 	}
-	
+
 
 	/*********************** IUploader ***********************/
 
 
 	/**
 	 * Handle file upload
-	 * 
+	 *
 	 * @throws UploaderNotReadyException
 	 */
 	public function upload()
@@ -76,9 +76,9 @@ class DefaultUploader implements IUploader
 		$chunks = isset($_REQUEST["chunks"]) ? (int) $_REQUEST["chunks"] : 0;
 		$fileName = isset($_REQUEST["name"])
 			? \Nette\Utils\Strings::webalize($_REQUEST["name"], '.')
-			: \Nette\Utils\Strings::random();
+			: \Nette\Utils\Random::generate();
 		$fileNameOriginal = $fileName;
-		$fileName = sha1($this->token.$chunks.$fileNameOriginal);
+		$fileName = sha1($chunks.$fileNameOriginal);
 		$filePath = $targetDir . DIRECTORY_SEPARATOR . $fileName;
 
 
@@ -96,7 +96,7 @@ class DefaultUploader implements IUploader
 			$fileNameOriginal = $fileName_a . '_' . $count . $fileName_b;
 		}
 
-
+		$contentType = '';
 		if (isset($_SERVER["HTTP_CONTENT_TYPE"])) {
 			$contentType = $_SERVER["HTTP_CONTENT_TYPE"];
 		}
